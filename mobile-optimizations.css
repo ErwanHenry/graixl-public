@@ -1,0 +1,741 @@
+/**
+ * 📱 Optimisations Mobile Graixl - CSS Responsive Design
+ * Améliore l'expérience utilisateur sur mobile et tablette
+ */
+
+/* === BREAKPOINTS RESPONSIVES === */
+:root {
+  --mobile-breakpoint: 768px;
+  --tablet-breakpoint: 1024px;
+  --desktop-breakpoint: 1200px;
+}
+
+/* === OPTIMISATIONS GÉNÉRALES MOBILE === */
+
+/* Navigation et Headers */
+@media (max-width: 768px) {
+  .header {
+    padding: 0.75rem 1rem !important;
+  }
+  
+  .header-content {
+    flex-direction: column !important;
+    gap: 1rem !important;
+    align-items: stretch !important;
+  }
+  
+  .header h1 {
+    font-size: 1.4rem !important;
+    text-align: center !important;
+  }
+  
+  .header-actions {
+    justify-content: center !important;
+    flex-wrap: wrap !important;
+    gap: 0.5rem !important;
+  }
+  
+  .btn {
+    padding: 0.5rem 1rem !important;
+    font-size: 0.9rem !important;
+    min-width: auto !important;
+  }
+  
+  .btn span {
+    display: none !important;
+  }
+  
+  .btn::before {
+    content: attr(data-mobile-text) !important;
+    font-size: 1.2rem !important;
+  }
+}
+
+/* === DASHBOARD PROSPECTION MOBILE === */
+
+@media (max-width: 768px) {
+  /* Statistiques rapides */
+  .quick-stats {
+    grid-template-columns: repeat(2, 1fr) !important;
+    gap: 1rem !important;
+  }
+  
+  .stat-card {
+    padding: 1rem !important;
+  }
+  
+  .stat-value {
+    font-size: 1.8rem !important;
+  }
+  
+  .stat-label {
+    font-size: 0.8rem !important;
+  }
+  
+  /* Grille principale dashboard */
+  .dashboard-grid {
+    grid-template-columns: 1fr !important;
+    gap: 1rem !important;
+  }
+  
+  /* Cards de campagne */
+  .campaign-metrics {
+    grid-template-columns: repeat(2, 1fr) !important;
+    gap: 0.75rem !important;
+  }
+  
+  .metric-value {
+    font-size: 1.2rem !important;
+  }
+  
+  .metric-label {
+    font-size: 0.7rem !important;
+  }
+  
+  .campaign-actions {
+    flex-direction: column !important;
+    gap: 0.5rem !important;
+  }
+  
+  .btn-small {
+    width: 100% !important;
+    justify-content: center !important;
+  }
+  
+  /* Actions rapides */
+  .quick-actions {
+    grid-template-columns: 1fr !important;
+    gap: 0.75rem !important;
+  }
+  
+  .quick-action-card {
+    padding: 1.5rem !important;
+  }
+  
+  .quick-action-icon {
+    font-size: 1.5rem !important;
+  }
+}
+
+/* === ANALYTICS DASHBOARD MOBILE === */
+
+@media (max-width: 768px) {
+  /* Barre de filtres */
+  .filters-bar {
+    padding: 1rem !important;
+  }
+  
+  .filters-content {
+    flex-direction: column !important;
+    align-items: stretch !important;
+    gap: 0.75rem !important;
+  }
+  
+  .filter-group {
+    width: 100% !important;
+  }
+  
+  .filter-input {
+    width: 100% !important;
+    min-width: auto !important;
+  }
+  
+  /* KPIs */
+  .kpi-grid {
+    grid-template-columns: repeat(2, 1fr) !important;
+    gap: 1rem !important;
+  }
+  
+  .kpi-card {
+    padding: 1rem !important;
+  }
+  
+  .kpi-value {
+    font-size: 2rem !important;
+  }
+  
+  .kpi-title {
+    font-size: 0.8rem !important;
+  }
+  
+  /* Graphiques */
+  .charts-grid {
+    grid-template-columns: 1fr !important;
+    gap: 1rem !important;
+  }
+  
+  .chart-container {
+    height: 250px !important;
+  }
+  
+  .chart-controls {
+    flex-wrap: wrap !important;
+    gap: 0.25rem !important;
+  }
+  
+  .chart-btn {
+    padding: 0.25rem 0.5rem !important;
+    font-size: 0.7rem !important;
+  }
+  
+  /* Performance grille */
+  .performance-grid {
+    grid-template-columns: 1fr !important;
+    gap: 1rem !important;
+  }
+  
+  /* Leaderboards */
+  .leaderboard-item {
+    padding: 0.5rem !important;
+    font-size: 0.9rem !important;
+  }
+  
+  .rank-number {
+    width: 20px !important;
+    height: 20px !important;
+    font-size: 0.7rem !important;
+  }
+  
+  .rank-name {
+    font-size: 0.8rem !important;
+  }
+  
+  .rank-metric {
+    font-size: 0.8rem !important;
+  }
+  
+  /* Insights */
+  .insights-grid {
+    grid-template-columns: 1fr !important;
+    gap: 1rem !important;
+  }
+  
+  .insight-card {
+    padding: 1rem !important;
+  }
+  
+  .insight-icon {
+    font-size: 1.5rem !important;
+  }
+  
+  .insight-title {
+    font-size: 1rem !important;
+  }
+  
+  .insight-description {
+    font-size: 0.8rem !important;
+  }
+}
+
+/* === PIPELINE CRM MOBILE === */
+
+@media (max-width: 768px) {
+  /* Toolbar */
+  .toolbar {
+    flex-direction: column !important;
+    gap: 1rem !important;
+    padding: 1rem !important;
+  }
+  
+  .pipeline-stats {
+    gap: 1rem !important;
+    justify-content: space-around !important;
+  }
+  
+  .stat-item {
+    text-align: center !important;
+  }
+  
+  .stat-value {
+    font-size: 1.5rem !important;
+  }
+  
+  .stat-label {
+    font-size: 0.8rem !important;
+  }
+  
+  /* Filtres pipeline */
+  .pipeline-filters {
+    flex-direction: column !important;
+    align-items: stretch !important;
+    gap: 0.75rem !important;
+  }
+  
+  .filter-select,
+  .search-box input {
+    width: 100% !important;
+  }
+  
+  .search-box input {
+    padding-left: 2rem !important;
+  }
+  
+  /* Kanban board */
+  .kanban-board {
+    grid-template-columns: 1fr !important;
+    gap: 1rem !important;
+    padding: 1rem !important;
+  }
+  
+  .kanban-column {
+    min-height: auto !important;
+    max-height: 500px !important;
+    overflow-y: auto !important;
+  }
+  
+  .column-header {
+    position: sticky !important;
+    top: 0 !important;
+    z-index: 10 !important;
+    margin-bottom: 0.75rem !important;
+  }
+  
+  .column-title {
+    font-size: 1rem !important;
+  }
+  
+  /* Cards prospects */
+  .prospect-card {
+    padding: 0.75rem !important;
+    margin-bottom: 0.75rem !important;
+  }
+  
+  .prospect-name {
+    font-size: 0.9rem !important;
+  }
+  
+  .prospect-company {
+    font-size: 0.8rem !important;
+  }
+  
+  .prospect-title {
+    font-size: 0.75rem !important;
+  }
+  
+  .prospect-meta {
+    font-size: 0.7rem !important;
+    flex-direction: column !important;
+    align-items: flex-start !important;
+    gap: 0.25rem !important;
+  }
+  
+  .prospect-actions {
+    opacity: 1 !important;
+    justify-content: space-around !important;
+    margin-top: 0.5rem !important;
+  }
+  
+  .action-btn {
+    padding: 0.35rem 0.7rem !important;
+    font-size: 0.9rem !important;
+  }
+  
+  .prospect-tags {
+    gap: 0.2rem !important;
+  }
+  
+  .tag {
+    font-size: 0.6rem !important;
+    padding: 0.15rem 0.4rem !important;
+  }
+}
+
+/* === WIZARD CAMPAGNE MOBILE === */
+
+@media (max-width: 768px) {
+  .wizard-container {
+    padding: 1rem !important;
+  }
+  
+  .wizard-steps {
+    flex-direction: column !important;
+    gap: 0.5rem !important;
+  }
+  
+  .step {
+    padding: 0.5rem !important;
+    font-size: 0.8rem !important;
+  }
+  
+  .step-content {
+    padding: 1rem !important;
+  }
+  
+  .form-grid {
+    grid-template-columns: 1fr !important;
+    gap: 1rem !important;
+  }
+  
+  .form-group label {
+    font-size: 0.9rem !important;
+  }
+  
+  .form-group input,
+  .form-group select,
+  .form-group textarea {
+    font-size: 1rem !important;
+    padding: 0.75rem !important;
+  }
+  
+  .wizard-actions {
+    flex-direction: column !important;
+    gap: 0.75rem !important;
+  }
+  
+  .wizard-actions .btn {
+    width: 100% !important;
+    justify-content: center !important;
+  }
+  
+  /* Critères de prospection */
+  .criteria-grid {
+    grid-template-columns: 1fr !important;
+    gap: 0.75rem !important;
+  }
+  
+  .criteria-card {
+    padding: 1rem !important;
+  }
+  
+  .criteria-title {
+    font-size: 1rem !important;
+  }
+  
+  /* Templates de messages */
+  .template-grid {
+    grid-template-columns: 1fr !important;
+    gap: 0.75rem !important;
+  }
+  
+  .template-card {
+    padding: 1rem !important;
+  }
+  
+  .template-preview {
+    font-size: 0.8rem !important;
+    max-height: 120px !important;
+  }
+}
+
+/* === MODALES MOBILE === */
+
+@media (max-width: 768px) {
+  .modal {
+    max-width: 95% !important;
+    width: 95% !important;
+    margin: 1rem !important;
+    padding: 1rem !important;
+    max-height: 90vh !important;
+  }
+  
+  .modal-header {
+    margin-bottom: 1rem !important;
+  }
+  
+  .modal-title {
+    font-size: 1.2rem !important;
+  }
+  
+  .form-group {
+    margin-bottom: 1rem !important;
+  }
+  
+  .form-group label {
+    font-size: 0.9rem !important;
+  }
+  
+  .form-group input,
+  .form-group select,
+  .form-group textarea {
+    padding: 0.75rem !important;
+    font-size: 1rem !important;
+  }
+  
+  .interaction-history {
+    max-height: 150px !important;
+  }
+  
+  .interaction-item {
+    padding-bottom: 0.75rem !important;
+    margin-bottom: 0.75rem !important;
+  }
+  
+  .interaction-icon {
+    width: 28px !important;
+    height: 28px !important;
+    font-size: 0.8rem !important;
+  }
+  
+  .interaction-title {
+    font-size: 0.9rem !important;
+  }
+  
+  .interaction-description {
+    font-size: 0.8rem !important;
+  }
+  
+  .interaction-time {
+    font-size: 0.7rem !important;
+  }
+}
+
+/* === OPTIMISATIONS TABLETTE === */
+
+@media (min-width: 769px) and (max-width: 1024px) {
+  /* Dashboard */
+  .dashboard-grid {
+    grid-template-columns: 1fr !important;
+  }
+  
+  .quick-stats {
+    grid-template-columns: repeat(4, 1fr) !important;
+  }
+  
+  /* Analytics */
+  .charts-grid {
+    grid-template-columns: 1fr !important;
+  }
+  
+  .performance-grid {
+    grid-template-columns: repeat(2, 1fr) !important;
+  }
+  
+  /* Pipeline */
+  .kanban-board {
+    grid-template-columns: repeat(3, 1fr) !important;
+  }
+  
+  .pipeline-stats {
+    gap: 2rem !important;
+  }
+  
+  .pipeline-filters {
+    gap: 1rem !important;
+  }
+}
+
+/* === OPTIMISATIONS TOUCH === */
+
+@media (pointer: coarse) {
+  /* Augmenter les zones de touch */
+  .btn {
+    min-height: 44px !important;
+    min-width: 44px !important;
+  }
+  
+  .action-btn {
+    min-height: 36px !important;
+    min-width: 36px !important;
+  }
+  
+  .prospect-card {
+    cursor: default !important;
+  }
+  
+  .prospect-card:hover {
+    transform: none !important;
+  }
+  
+  .prospect-card:active {
+    transform: scale(0.98) !important;
+  }
+  
+  /* Améliorer les interactions drag & drop */
+  .prospect-card.dragging {
+    transform: scale(1.05) !important;
+    opacity: 0.8 !important;
+    box-shadow: 0 8px 25px rgba(0,0,0,0.3) !important;
+  }
+  
+  .kanban-column.drag-over {
+    background: rgba(102, 126, 234, 0.1) !important;
+  }
+}
+
+/* === NAVIGATION MOBILE === */
+
+@media (max-width: 768px) {
+  /* Ajouter navigation mobile si nécessaire */
+  .mobile-nav {
+    position: fixed !important;
+    bottom: 0 !important;
+    left: 0 !important;
+    right: 0 !important;
+    background: white !important;
+    border-top: 1px solid #e5e7eb !important;
+    padding: 0.75rem !important;
+    z-index: 100 !important;
+    display: flex !important;
+    justify-content: space-around !important;
+    align-items: center !important;
+  }
+  
+  .mobile-nav-item {
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center !important;
+    gap: 0.25rem !important;
+    padding: 0.5rem !important;
+    border-radius: 8px !important;
+    text-decoration: none !important;
+    color: #64748b !important;
+    font-size: 0.7rem !important;
+    font-weight: 500 !important;
+    transition: all 0.3s ease !important;
+  }
+  
+  .mobile-nav-item.active {
+    color: #667eea !important;
+    background: #f1f5f9 !important;
+  }
+  
+  .mobile-nav-icon {
+    font-size: 1.2rem !important;
+  }
+  
+  /* Ajuster le padding bottom pour la navigation mobile */
+  body {
+    padding-bottom: 80px !important;
+  }
+}
+
+/* === OPTIMISATIONS PERFORMANCE MOBILE === */
+
+@media (max-width: 768px) {
+  /* Réduire les animations coûteuses */
+  * {
+    animation-duration: 0.2s !important;
+    transition-duration: 0.2s !important;
+  }
+  
+  /* Optimiser les box-shadows */
+  .stat-card,
+  .chart-card,
+  .performance-card,
+  .prospect-card {
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1) !important;
+  }
+  
+  .stat-card:hover,
+  .chart-card:hover,
+  .performance-card:hover {
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15) !important;
+  }
+  
+  /* Réduire les gradients complexes */
+  .header {
+    background: #667eea !important;
+  }
+  
+  .btn-primary {
+    background: #10b981 !important;
+  }
+  
+  .insight-card {
+    background: #667eea !important;
+  }
+}
+
+/* === OPTIMISATIONS LANDSCAPE MOBILE === */
+
+@media (max-width: 768px) and (orientation: landscape) {
+  .header {
+    padding: 0.5rem 1rem !important;
+  }
+  
+  .header-content {
+    flex-direction: row !important;
+    justify-content: space-between !important;
+  }
+  
+  .header h1 {
+    font-size: 1.2rem !important;
+  }
+  
+  .kanban-board {
+    grid-template-columns: repeat(3, 1fr) !important;
+  }
+  
+  .kanban-column {
+    max-height: 400px !important;
+  }
+  
+  .modal {
+    max-height: 85vh !important;
+  }
+}
+
+/* === PRINT STYLES === */
+
+@media print {
+  .header-actions,
+  .btn,
+  .action-btn,
+  .quick-add-btn,
+  .mobile-nav {
+    display: none !important;
+  }
+  
+  .header {
+    background: none !important;
+    color: black !important;
+    border-bottom: 2px solid #000 !important;
+  }
+  
+  .stat-card,
+  .chart-card,
+  .performance-card,
+  .prospect-card {
+    border: 1px solid #000 !important;
+    box-shadow: none !important;
+    break-inside: avoid !important;
+  }
+  
+  .kanban-board {
+    grid-template-columns: repeat(2, 1fr) !important;
+  }
+}
+
+/* === DARK MODE SUPPORT === */
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg-primary: #1e293b;
+    --bg-secondary: #334155;
+    --text-primary: #f1f5f9;
+    --text-secondary: #cbd5e1;
+    --border-color: #475569;
+  }
+  
+  body {
+    background: var(--bg-primary) !important;
+    color: var(--text-primary) !important;
+  }
+  
+  .stat-card,
+  .chart-card,
+  .performance-card,
+  .prospect-card,
+  .modal {
+    background: var(--bg-secondary) !important;
+    border-color: var(--border-color) !important;
+    color: var(--text-primary) !important;
+  }
+  
+  .kanban-column {
+    background: var(--bg-secondary) !important;
+  }
+  
+  .prospect-header {
+    color: var(--text-primary) !important;
+  }
+  
+  .prospect-company {
+    color: #93c5fd !important;
+  }
+  
+  .prospect-title,
+  .prospect-meta {
+    color: var(--text-secondary) !important;
+  }
+}

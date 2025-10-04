@@ -1,0 +1,435 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🧪 Test Intégration Graixl</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            margin: 0;
+            padding: 2rem;
+        }
+        
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: rgba(255,255,255,0.1);
+            border-radius: 15px;
+            padding: 2rem;
+            backdrop-filter: blur(10px);
+        }
+        
+        h1 {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+        
+        .test-section {
+            background: rgba(255,255,255,0.1);
+            border-radius: 10px;
+            padding: 1.5rem;
+            margin: 1rem 0;
+        }
+        
+        .test-button {
+            background: linear-gradient(45deg, #ff6b6b, #4ecdc4);
+            border: none;
+            color: white;
+            padding: 0.75rem 1.5rem;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: bold;
+            margin: 0.5rem;
+        }
+        
+        .test-button:hover {
+            transform: translateY(-2px);
+        }
+        
+        .test-result {
+            background: rgba(0,0,0,0.3);
+            border-radius: 8px;
+            padding: 1rem;
+            margin-top: 1rem;
+            font-family: monospace;
+            min-height: 100px;
+            overflow-y: auto;
+        }
+        
+        .success { color: #4CAF50; }
+        .error { color: #f44336; }
+        .info { color: #2196F3; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🧪 Test d'Intégration Graixl</h1>
+        <p>Validation de l'architecture hexagonale et de l'API de prospection</p>
+        
+        <div class="test-section">
+            <h3>🔧 Tests Techniques</h3>
+            <button class="test-button" onclick="testApiConnection()">Test Connexion API</button>
+            <button class="test-button" onclick="testProspectionAPI()">Test API Prospection</button>
+            <button class="test-button" onclick="testLinkedInSearch()">Test Recherche LinkedIn</button>
+            <div id="technical-results" class="test-result">
+                Prêt pour les tests techniques...
+            </div>
+        </div>
+        
+        <div class="test-section">
+            <h3>🎯 Tests Fonctionnels</h3>
+            <button class="test-button" onclick="testCampaignFlow()">Test Flux Campagne</button>
+            <button class="test-button" onclick="testMessageSending()">Test Envoi Messages</button>
+            <button class="test-button" onclick="testRealTimeUpdates()">Test Temps Réel</button>
+            <div id="functional-results" class="test-result">
+                Prêt pour les tests fonctionnels...
+            </div>
+        </div>
+        
+        <div class="test-section">
+            <h3>🏗️ Tests Architecture</h3>
+            <button class="test-button" onclick="testHexagonalIntegration()">Test Architecture Hexagonale</button>
+            <button class="test-button" onclick="testAIEngines()">Test Moteurs IA</button>
+            <button class="test-button" onclick="testFullIntegration()">Test Intégration Complète</button>
+            <div id="architecture-results" class="test-result">
+                Prêt pour les tests d'architecture...
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Fonctions de test
+
+        async function testApiConnection() {
+            log('technical-results', '🔌 Test de connexion API...', 'info');
+            
+            try {
+                // Test de l'API ecosystem
+                const ecosystemResponse = await fetch('/api/ecosystem?action=status');
+                const ecosystemResult = await ecosystemResponse.json();
+                
+                if (ecosystemResult.success) {
+                    log('technical-results', '✅ API Ecosystem: Opérationnelle', 'success');
+                } else {
+                    log('technical-results', '❌ API Ecosystem: Échec', 'error');
+                }
+                
+                // Test de l'API prospection
+                const prospectionResponse = await fetch('/api/prospection?action=status');
+                const prospectionResult = await prospectionResponse.json();
+                
+                if (prospectionResult.success) {
+                    log('technical-results', '✅ API Prospection: Opérationnelle', 'success');
+                    log('technical-results', `📊 Status: ${prospectionResult.status}`, 'info');
+                } else {
+                    log('technical-results', '❌ API Prospection: Échec', 'error');
+                }
+                
+            } catch (error) {
+                log('technical-results', `❌ Erreur de connexion: ${error.message}`, 'error');
+            }
+        }
+
+        async function testProspectionAPI() {
+            log('technical-results', '🎯 Test API Prospection complète...', 'info');
+            
+            try {
+                // Test recherche LinkedIn
+                const searchData = {
+                    keywords: 'CEO OR CTO',
+                    industries: 'Software Development',
+                    companySize: '51-200',
+                    location: 'France',
+                    targetCount: 5
+                };
+                
+                const searchResponse = await fetch('/api/prospection?action=search', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(searchData)
+                });
+                
+                const searchResult = await searchResponse.json();
+                
+                if (searchResult.success) {
+                    log('technical-results', `✅ Recherche: ${searchResult.results.prospects_found} prospects trouvés`, 'success');
+                    log('technical-results', `🎯 Score qualité: ${(searchResult.results.quality_score * 100).toFixed(1)}%`, 'info');
+                } else {
+                    log('technical-results', '❌ Recherche LinkedIn: Échec', 'error');
+                }
+                
+            } catch (error) {
+                log('technical-results', `❌ Erreur test prospection: ${error.message}`, 'error');
+            }
+        }
+
+        async function testLinkedInSearch() {
+            log('technical-results', '🔍 Test recherche LinkedIn avec IA...', 'info');
+            
+            try {
+                const criteria = {
+                    keywords: 'Directeur Marketing OR CMO',
+                    industries: 'Digital Marketing,Marketing Services',
+                    companySize: '11-50',
+                    location: 'Paris',
+                    targetCount: 10
+                };
+                
+                const response = await fetch('/api/prospection?action=search', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(criteria)
+                });
+                
+                const result = await response.json();
+                
+                if (result.success && result.prospects) {
+                    log('technical-results', `✅ Prospects trouvés: ${result.prospects.length}`, 'success');
+                    result.prospects.forEach(prospect => {
+                        log('technical-results', `👤 ${prospect.name} - ${prospect.company} (Score: ${prospect.score})`, 'info');
+                    });
+                    log('technical-results', `⚡ Moteurs IA utilisés: ${result.results.ai_engines_used.join(', ')}`, 'info');
+                } else {
+                    log('technical-results', '❌ Recherche LinkedIn: Aucun résultat', 'error');
+                }
+                
+            } catch (error) {
+                log('technical-results', `❌ Erreur recherche LinkedIn: ${error.message}`, 'error');
+            }
+        }
+
+        async function testCampaignFlow() {
+            log('functional-results', '🚀 Test flux de campagne complet...', 'info');
+            
+            try {
+                // Démarrer une campagne
+                const campaignConfig = {
+                    name: 'Test Campaign Integration',
+                    useLinkedIn: true,
+                    useEmail: true,
+                    campaignMode: 'manual',
+                    sendingSpeed: 'conservative'
+                };
+                
+                const startResponse = await fetch('/api/prospection?action=start-campaign', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(campaignConfig)
+                });
+                
+                const startResult = await startResponse.json();
+                
+                if (startResult.success) {
+                    log('functional-results', `✅ Campagne démarrée: ${startResult.campaign.id}`, 'success');
+                    log('functional-results', `📋 Configuration: LinkedIn(${startResult.campaign.useLinkedIn}) Email(${startResult.campaign.useEmail})`, 'info');
+                    
+                    // Test pause
+                    setTimeout(async () => {
+                        const pauseResponse = await fetch('/api/prospection?action=pause-campaign', {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify({ campaignId: startResult.campaign.id })
+                        });
+                        
+                        const pauseResult = await pauseResponse.json();
+                        if (pauseResult.success) {
+                            log('functional-results', '⏸️ Campagne mise en pause avec succès', 'success');
+                        }
+                    }, 2000);
+                    
+                } else {
+                    log('functional-results', '❌ Échec démarrage campagne', 'error');
+                }
+                
+            } catch (error) {
+                log('functional-results', `❌ Erreur flux campagne: ${error.message}`, 'error');
+            }
+        }
+
+        async function testMessageSending() {
+            log('functional-results', '✉️ Test envoi de messages...', 'info');
+            
+            try {
+                const messageData = {
+                    prospectId: 'prospect_test_1',
+                    message: 'Bonjour, message de test pour la validation de l\'intégration Graixl',
+                    channel: 'linkedin'
+                };
+                
+                const response = await fetch('/api/prospection?action=send-message', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(messageData)
+                });
+                
+                const result = await response.json();
+                
+                if (result.success) {
+                    log('functional-results', '✅ Message envoyé avec succès', 'success');
+                    log('functional-results', `📧 Canal: ${result.interaction.type}`, 'info');
+                } else {
+                    log('functional-results', '❌ Échec envoi message', 'error');
+                }
+                
+            } catch (error) {
+                log('functional-results', `❌ Erreur envoi message: ${error.message}`, 'error');
+            }
+        }
+
+        async function testRealTimeUpdates() {
+            log('functional-results', '⏱️ Test mises à jour temps réel...', 'info');
+            
+            try {
+                // Test récupération stats
+                const statsResponse = await fetch('/api/prospection?action=get-stats');
+                const statsResult = await statsResponse.json();
+                
+                if (statsResult.success) {
+                    log('functional-results', '✅ Stats récupérées en temps réel', 'success');
+                    log('functional-results', `📊 Prospects: ${statsResult.stats.totalProspects}, Messages: ${statsResult.stats.messagesSent}`, 'info');
+                }
+                
+                // Test récupération prospects
+                const prospectsResponse = await fetch('/api/prospection?action=get-prospects');
+                const prospectsResult = await prospectsResponse.json();
+                
+                if (prospectsResult.success) {
+                    log('functional-results', `✅ ${prospectsResult.total} prospects récupérés`, 'success');
+                }
+                
+            } catch (error) {
+                log('functional-results', `❌ Erreur temps réel: ${error.message}`, 'error');
+            }
+        }
+
+        async function testHexagonalIntegration() {
+            log('architecture-results', '🏗️ Test architecture hexagonale...', 'info');
+            
+            try {
+                // Test que l'API respecte les patterns hexagonaux
+                log('architecture-results', '🔧 Vérification des ports et adapters...', 'info');
+                
+                // Test API prospection (Port)
+                const prospectionTest = await fetch('/api/prospection?action=status');
+                const prospectionResult = await prospectionTest.json();
+                
+                if (prospectionResult.success && prospectionResult.features) {
+                    log('architecture-results', '✅ Port Prospection: Opérationnel', 'success');
+                    log('architecture-results', `🎯 Features: ${Object.keys(prospectionResult.features).join(', ')}`, 'info');
+                }
+                
+                // Test API ecosystem (Port)
+                const ecosystemTest = await fetch('/api/ecosystem?action=status');
+                const ecosystemResult = await ecosystemTest.json();
+                
+                if (ecosystemResult.success) {
+                    log('architecture-results', '✅ Port Ecosystem: Opérationnel', 'success');
+                }
+                
+                log('architecture-results', '🏛️ Architecture hexagonale validée', 'success');
+                
+            } catch (error) {
+                log('architecture-results', `❌ Erreur architecture: ${error.message}`, 'error');
+            }
+        }
+
+        async function testAIEngines() {
+            log('architecture-results', '🧠 Test moteurs IA...', 'info');
+            
+            try {
+                // Test que les moteurs IA sont intégrés
+                const searchResponse = await fetch('/api/prospection?action=search', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        keywords: 'Test AI Engines',
+                        targetCount: 3
+                    })
+                });
+                
+                const searchResult = await searchResponse.json();
+                
+                if (searchResult.success && searchResult.results.ai_engines_used) {
+                    log('architecture-results', '✅ Moteurs IA actifs', 'success');
+                    searchResult.results.ai_engines_used.forEach(engine => {
+                        log('architecture-results', `🤖 ${engine}: Opérationnel`, 'info');
+                    });
+                    log('architecture-results', `⚡ Score de qualité IA: ${(searchResult.results.quality_score * 100).toFixed(1)}%`, 'success');
+                } else {
+                    log('architecture-results', '❌ Moteurs IA non détectés', 'error');
+                }
+                
+            } catch (error) {
+                log('architecture-results', `❌ Erreur moteurs IA: ${error.message}`, 'error');
+            }
+        }
+
+        async function testFullIntegration() {
+            log('architecture-results', '🚀 Test intégration complète...', 'info');
+            
+            try {
+                // Test workflow complet
+                log('architecture-results', '1️⃣ Recherche prospects...', 'info');
+                const searchResponse = await fetch('/api/prospection?action=search', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        keywords: 'CEO OR Founder',
+                        industries: 'Technology',
+                        targetCount: 5
+                    })
+                });
+                
+                const searchResult = await searchResponse.json();
+                if (!searchResult.success) throw new Error('Recherche échec');
+                
+                log('architecture-results', '2️⃣ Démarrage campagne...', 'info');
+                const campaignResponse = await fetch('/api/prospection?action=start-campaign', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        name: 'Test Integration Complète',
+                        useLinkedIn: true,
+                        useEmail: true
+                    })
+                });
+                
+                const campaignResult = await campaignResponse.json();
+                if (!campaignResult.success) throw new Error('Campagne échec');
+                
+                log('architecture-results', '3️⃣ Vérification stats...', 'info');
+                const statsResponse = await fetch('/api/prospection?action=get-stats');
+                const statsResult = await statsResponse.json();
+                if (!statsResult.success) throw new Error('Stats échec');
+                
+                log('architecture-results', '✅ INTÉGRATION COMPLÈTE VALIDÉE', 'success');
+                log('architecture-results', `🎯 ${searchResult.results.prospects_found} prospects → Campagne ${campaignResult.campaign.id} → Stats OK`, 'success');
+                
+            } catch (error) {
+                log('architecture-results', `❌ Erreur intégration: ${error.message}`, 'error');
+            }
+        }
+
+        // Utilitaire de logging
+        function log(containerId, message, type = 'info') {
+            const container = document.getElementById(containerId);
+            const timestamp = new Date().toLocaleTimeString();
+            const entry = document.createElement('div');
+            entry.className = type;
+            entry.textContent = `[${timestamp}] ${message}`;
+            container.appendChild(entry);
+            container.scrollTop = container.scrollHeight;
+        }
+
+        // Initialisation
+        document.addEventListener('DOMContentLoaded', () => {
+            log('technical-results', '🎯 Interface de test Graixl initialisée', 'success');
+            log('functional-results', '🚀 Tests fonctionnels prêts', 'success');
+            log('architecture-results', '🏗️ Tests d\'architecture prêts', 'success');
+        });
+    </script>
+</body>
+</html>

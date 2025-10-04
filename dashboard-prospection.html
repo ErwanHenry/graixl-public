@@ -1,0 +1,733 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🎯 Graixl - Dashboard Prospection</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #f8fafc;
+            color: #334155;
+            line-height: 1.6;
+        }
+        
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 1rem 2rem;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+        }
+        
+        .header-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .header h1 {
+            font-size: 1.8rem;
+            font-weight: 600;
+        }
+        
+        .header-actions {
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+        }
+        
+        .btn {
+            background: rgba(255,255,255,0.2);
+            color: white;
+            border: none;
+            padding: 0.75rem 1.5rem;
+            border-radius: 8px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            text-decoration: none;
+        }
+        
+        .btn:hover {
+            background: rgba(255,255,255,0.3);
+            transform: translateY(-2px);
+        }
+        
+        .btn-primary {
+            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+            box-shadow: 0 4px 15px rgba(16, 185, 129, 0.3);
+        }
+        
+        .btn-primary:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(16, 185, 129, 0.4);
+        }
+        
+        .main-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+        
+        .quick-stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+        
+        .stat-card {
+            background: white;
+            border-radius: 12px;
+            padding: 1.5rem;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+            border: 1px solid #e2e8f0;
+            transition: transform 0.3s ease;
+        }
+        
+        .stat-card:hover {
+            transform: translateY(-5px);
+        }
+        
+        .stat-value {
+            font-size: 2.5rem;
+            font-weight: bold;
+            margin-bottom: 0.5rem;
+        }
+        
+        .stat-label {
+            color: #64748b;
+            font-size: 0.9rem;
+            font-weight: 500;
+        }
+        
+        .stat-trend {
+            font-size: 0.8rem;
+            margin-top: 0.5rem;
+        }
+        
+        .trend-up { color: #10b981; }
+        .trend-down { color: #ef4444; }
+        
+        .stat-active { color: #667eea; }
+        .stat-prospects { color: #10b981; }
+        .stat-responses { color: #f59e0b; }
+        .stat-meetings { color: #8b5cf6; }
+        
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+        
+        .section {
+            background: white;
+            border-radius: 12px;
+            padding: 1.5rem;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+            border: 1px solid #e2e8f0;
+        }
+        
+        .section-title {
+            font-size: 1.3rem;
+            font-weight: 600;
+            color: #1e293b;
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .campaigns-list {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+        
+        .campaign-card {
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+            padding: 1.5rem;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+        
+        .campaign-card:hover {
+            border-color: #667eea;
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.1);
+        }
+        
+        .campaign-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 1rem;
+        }
+        
+        .campaign-name {
+            font-weight: 600;
+            color: #1e293b;
+            font-size: 1.1rem;
+        }
+        
+        .campaign-status {
+            padding: 0.25rem 0.75rem;
+            border-radius: 15px;
+            font-size: 0.8rem;
+            font-weight: 500;
+        }
+        
+        .status-active {
+            background: #dcfce7;
+            color: #166534;
+        }
+        
+        .status-paused {
+            background: #fed7aa;
+            color: #c2410c;
+        }
+        
+        .status-completed {
+            background: #e0e7ff;
+            color: #3730a3;
+        }
+        
+        .campaign-metrics {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+        
+        .metric {
+            text-align: center;
+        }
+        
+        .metric-value {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #667eea;
+        }
+        
+        .metric-label {
+            font-size: 0.8rem;
+            color: #64748b;
+        }
+        
+        .campaign-progress {
+            margin-bottom: 1rem;
+        }
+        
+        .progress-bar {
+            width: 100%;
+            height: 6px;
+            background: #e2e8f0;
+            border-radius: 3px;
+            overflow: hidden;
+        }
+        
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #667eea, #764ba2);
+            transition: width 0.3s ease;
+        }
+        
+        .progress-text {
+            font-size: 0.8rem;
+            color: #64748b;
+            margin-top: 0.5rem;
+        }
+        
+        .campaign-actions {
+            display: flex;
+            gap: 0.5rem;
+            margin-top: 1rem;
+        }
+        
+        .btn-small {
+            padding: 0.5rem 1rem;
+            font-size: 0.8rem;
+            border-radius: 6px;
+        }
+        
+        .btn-outline {
+            background: transparent;
+            border: 1px solid #667eea;
+            color: #667eea;
+        }
+        
+        .btn-outline:hover {
+            background: #667eea;
+            color: white;
+        }
+        
+        .activity-feed {
+            max-height: 400px;
+            overflow-y: auto;
+        }
+        
+        .activity-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 1rem;
+            padding: 1rem 0;
+            border-bottom: 1px solid #f1f5f9;
+        }
+        
+        .activity-item:last-child {
+            border-bottom: none;
+        }
+        
+        .activity-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+            color: white;
+            flex-shrink: 0;
+        }
+        
+        .activity-prospect { background: #10b981; }
+        .activity-message { background: #667eea; }
+        .activity-response { background: #f59e0b; }
+        .activity-meeting { background: #8b5cf6; }
+        
+        .activity-content {
+            flex: 1;
+        }
+        
+        .activity-title {
+            font-weight: 500;
+            color: #1e293b;
+            margin-bottom: 0.25rem;
+        }
+        
+        .activity-description {
+            font-size: 0.9rem;
+            color: #64748b;
+            margin-bottom: 0.25rem;
+        }
+        
+        .activity-time {
+            font-size: 0.8rem;
+            color: #94a3b8;
+        }
+        
+        .quick-actions {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+            margin-top: 1.5rem;
+        }
+        
+        .quick-action-card {
+            background: #f8fafc;
+            border: 2px dashed #cbd5e1;
+            border-radius: 8px;
+            padding: 2rem;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .quick-action-card:hover {
+            border-color: #667eea;
+            background: #f1f5f9;
+        }
+        
+        .quick-action-icon {
+            font-size: 2rem;
+            margin-bottom: 1rem;
+        }
+        
+        .quick-action-title {
+            font-weight: 600;
+            color: #1e293b;
+            margin-bottom: 0.5rem;
+        }
+        
+        .quick-action-description {
+            font-size: 0.9rem;
+            color: #64748b;
+        }
+        
+        .empty-state {
+            text-align: center;
+            padding: 3rem 2rem;
+            color: #64748b;
+        }
+        
+        .empty-state-icon {
+            font-size: 4rem;
+            margin-bottom: 1rem;
+            opacity: 0.3;
+        }
+        
+        @media (max-width: 768px) {
+            .dashboard-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .campaign-metrics {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            
+            .quick-actions {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <div class="header-content">
+            <h1>🎯 Dashboard Prospection Graixl</h1>
+            <div class="header-actions">
+                <button class="btn btn-primary" onclick="createCampaign()">
+                    <span>➕</span> Nouvelle Campagne
+                </button>
+                <button class="btn" onclick="viewAnalytics()">
+                    <span>📊</span> Analytics
+                </button>
+                <button class="btn" onclick="viewProspects()">
+                    <span>👥</span> Prospects
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <div class="main-container">
+        <!-- Statistiques rapides -->
+        <div class="quick-stats">
+            <div class="stat-card">
+                <div class="stat-value stat-active" id="activeCampaigns">3</div>
+                <div class="stat-label">Campagnes Actives</div>
+                <div class="stat-trend trend-up">↗ +2 cette semaine</div>
+            </div>
+            
+            <div class="stat-card">
+                <div class="stat-value stat-prospects" id="totalProspects">247</div>
+                <div class="stat-label">Prospects Totaux</div>
+                <div class="stat-trend trend-up">↗ +89 ce mois</div>
+            </div>
+            
+            <div class="stat-card">
+                <div class="stat-value stat-responses" id="responseRate">23%</div>
+                <div class="stat-label">Taux de Réponse</div>
+                <div class="stat-trend trend-up">↗ +5% vs mois dernier</div>
+            </div>
+            
+            <div class="stat-card">
+                <div class="stat-value stat-meetings" id="meetingsScheduled">12</div>
+                <div class="stat-label">RDV Programmés</div>
+                <div class="stat-trend trend-up">↗ +8 cette semaine</div>
+            </div>
+        </div>
+
+        <div class="dashboard-grid">
+            <!-- Campagnes actives -->
+            <div class="section">
+                <div class="section-title">
+                    <span>🚀</span>
+                    Mes Campagnes de Prospection
+                </div>
+                
+                <div class="campaigns-list" id="campaignsList">
+                    <!-- Les campagnes seront chargées ici -->
+                </div>
+                
+                <div class="quick-actions">
+                    <div class="quick-action-card" onclick="createCampaign()">
+                        <div class="quick-action-icon">➕</div>
+                        <div class="quick-action-title">Nouvelle Campagne</div>
+                        <div class="quick-action-description">Créer une campagne de prospection LinkedIn</div>
+                    </div>
+                    
+                    <div class="quick-action-card" onclick="importProspects()">
+                        <div class="quick-action-icon">📥</div>
+                        <div class="quick-action-title">Importer Prospects</div>
+                        <div class="quick-action-description">Ajouter prospects depuis fichier CSV</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Activité récente -->
+            <div class="section">
+                <div class="section-title">
+                    <span>📋</span>
+                    Activité Récente
+                </div>
+                
+                <div class="activity-feed" id="activityFeed">
+                    <!-- L'activité sera chargée ici -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Données de démo pour les campagnes
+        const sampleCampaigns = [
+            {
+                id: 1,
+                name: "Directeurs Marketing SaaS France",
+                status: "active",
+                prospects: 45,
+                contacted: 32,
+                responses: 8,
+                meetings: 3,
+                progress: 71,
+                startDate: "2024-03-15",
+                industry: "SaaS",
+                location: "France"
+            },
+            {
+                id: 2,
+                name: "CTOs Startups Paris",
+                status: "active",
+                prospects: 67,
+                contacted: 67,
+                responses: 12,
+                meetings: 5,
+                progress: 100,
+                startDate: "2024-03-10",
+                industry: "Tech",
+                location: "Paris"
+            },
+            {
+                id: 3,
+                name: "CEOs E-commerce Lyon",
+                status: "paused",
+                prospects: 23,
+                contacted: 15,
+                responses: 3,
+                meetings: 1,
+                progress: 65,
+                startDate: "2024-03-20",
+                industry: "E-commerce",
+                location: "Lyon"
+            }
+        ];
+
+        // Données d'activité récente
+        const recentActivity = [
+            {
+                type: "meeting",
+                icon: "📅",
+                title: "RDV programmé",
+                description: "Pierre Martin (InnovCorp) - Demain 14h",
+                time: "Il y a 2 heures"
+            },
+            {
+                type: "response",
+                icon: "💬",
+                title: "Nouvelle réponse",
+                description: "Sophie Laurent intéressée par une démo",
+                time: "Il y a 4 heures"
+            },
+            {
+                type: "message",
+                icon: "📧",
+                title: "Messages envoyés",
+                description: "15 nouveaux contacts dans campagne SaaS",
+                time: "Il y a 6 heures"
+            },
+            {
+                type: "prospect",
+                icon: "👤",
+                title: "Nouveaux prospects",
+                description: "23 prospects trouvés - Directeurs Marketing",
+                time: "Hier"
+            },
+            {
+                type: "response",
+                icon: "💬",
+                title: "Réponse positive",
+                description: "Thomas Dubois demande plus d'informations",
+                time: "Hier"
+            }
+        ];
+
+        // Fonctions principales
+        function loadCampaigns() {
+            const container = document.getElementById('campaignsList');
+            
+            if (sampleCampaigns.length === 0) {
+                container.innerHTML = `
+                    <div class="empty-state">
+                        <div class="empty-state-icon">🎯</div>
+                        <h3>Aucune campagne active</h3>
+                        <p>Créez votre première campagne de prospection pour commencer</p>
+                    </div>
+                `;
+                return;
+            }
+            
+            container.innerHTML = sampleCampaigns.map(campaign => `
+                <div class="campaign-card" onclick="viewCampaign(${campaign.id})">
+                    <div class="campaign-header">
+                        <div class="campaign-name">${campaign.name}</div>
+                        <div class="campaign-status status-${campaign.status}">
+                            ${campaign.status === 'active' ? 'Active' : 
+                              campaign.status === 'paused' ? 'En pause' : 'Terminée'}
+                        </div>
+                    </div>
+                    
+                    <div class="campaign-metrics">
+                        <div class="metric">
+                            <div class="metric-value">${campaign.prospects}</div>
+                            <div class="metric-label">Prospects</div>
+                        </div>
+                        <div class="metric">
+                            <div class="metric-value">${campaign.contacted}</div>
+                            <div class="metric-label">Contactés</div>
+                        </div>
+                        <div class="metric">
+                            <div class="metric-value">${campaign.responses}</div>
+                            <div class="metric-label">Réponses</div>
+                        </div>
+                        <div class="metric">
+                            <div class="metric-value">${campaign.meetings}</div>
+                            <div class="metric-label">RDV</div>
+                        </div>
+                    </div>
+                    
+                    <div class="campaign-progress">
+                        <div class="progress-bar">
+                            <div class="progress-fill" style="width: ${campaign.progress}%"></div>
+                        </div>
+                        <div class="progress-text">Progression: ${campaign.progress}% - ${campaign.industry}, ${campaign.location}</div>
+                    </div>
+                    
+                    <div class="campaign-actions">
+                        <button class="btn btn-small btn-outline" onclick="event.stopPropagation(); editCampaign(${campaign.id})">
+                            ✏️ Modifier
+                        </button>
+                        <button class="btn btn-small ${campaign.status === 'active' ? 'btn-outline' : 'btn-primary'}" 
+                                onclick="event.stopPropagation(); toggleCampaign(${campaign.id})">
+                            ${campaign.status === 'active' ? '⏸️ Pause' : '▶️ Reprendre'}
+                        </button>
+                        <button class="btn btn-small btn-outline" onclick="event.stopPropagation(); viewCampaignAnalytics(${campaign.id})">
+                            📊 Stats
+                        </button>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function loadActivity() {
+            const container = document.getElementById('activityFeed');
+            
+            container.innerHTML = recentActivity.map(activity => `
+                <div class="activity-item">
+                    <div class="activity-icon activity-${activity.type}">
+                        ${activity.icon}
+                    </div>
+                    <div class="activity-content">
+                        <div class="activity-title">${activity.title}</div>
+                        <div class="activity-description">${activity.description}</div>
+                        <div class="activity-time">${activity.time}</div>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // Actions principales
+        function createCampaign() {
+            // Rediriger vers le wizard de création de campagne
+            window.location.href = '/campaign-wizard';
+        }
+
+        function viewCampaign(campaignId) {
+            // Rediriger vers la vue détaillée de la campagne
+            window.location.href = `/campaign/${campaignId}`;
+        }
+
+        function editCampaign(campaignId) {
+            console.log('Modifier campagne:', campaignId);
+            // Logique d'édition
+        }
+
+        function toggleCampaign(campaignId) {
+            const campaign = sampleCampaigns.find(c => c.id === campaignId);
+            if (campaign) {
+                campaign.status = campaign.status === 'active' ? 'paused' : 'active';
+                loadCampaigns();
+            }
+        }
+
+        function viewCampaignAnalytics(campaignId) {
+            window.location.href = `/campaign/${campaignId}/analytics`;
+        }
+
+        function viewAnalytics() {
+            window.location.href = '/analytics';
+        }
+
+        function viewProspects() {
+            window.location.href = '/prospects';
+        }
+
+        function importProspects() {
+            console.log('Importer prospects');
+            // Logique d'import
+        }
+
+        // Mise à jour des statistiques en temps réel
+        function updateStats() {
+            // Calculs basés sur les campagnes actuelles
+            const activeCampaigns = sampleCampaigns.filter(c => c.status === 'active').length;
+            const totalProspects = sampleCampaigns.reduce((total, c) => total + c.prospects, 0);
+            const totalContacted = sampleCampaigns.reduce((total, c) => total + c.contacted, 0);
+            const totalResponses = sampleCampaigns.reduce((total, c) => total + c.responses, 0);
+            const totalMeetings = sampleCampaigns.reduce((total, c) => total + c.meetings, 0);
+            const responseRate = totalContacted > 0 ? Math.round((totalResponses / totalContacted) * 100) : 0;
+
+            document.getElementById('activeCampaigns').textContent = activeCampaigns;
+            document.getElementById('totalProspects').textContent = totalProspects;
+            document.getElementById('responseRate').textContent = responseRate + '%';
+            document.getElementById('meetingsScheduled').textContent = totalMeetings;
+        }
+
+        // Initialisation
+        document.addEventListener('DOMContentLoaded', () => {
+            loadCampaigns();
+            loadActivity();
+            updateStats();
+
+            // Simulation de mise à jour temps réel
+            setInterval(() => {
+                // Simule de nouvelles activités
+                if (Math.random() < 0.1) { // 10% de chance
+                    recentActivity.unshift({
+                        type: "response",
+                        icon: "💬",
+                        title: "Nouvelle réponse",
+                        description: "Prospect intéressé par Graixl",
+                        time: "À l'instant"
+                    });
+                    if (recentActivity.length > 10) {
+                        recentActivity.pop();
+                    }
+                    loadActivity();
+                }
+            }, 30000); // Toutes les 30 secondes
+        });
+    </script>
+</body>
+</html>

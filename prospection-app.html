@@ -1,0 +1,1007 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🎯 Graixl Prospection - Outil Opérationnel</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #f5f7fa;
+            color: #333;
+            line-height: 1.6;
+        }
+        
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 1rem 2rem;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        
+        .header h1 {
+            font-size: 1.8rem;
+            font-weight: 600;
+        }
+        
+        .main-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 2rem;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+        }
+        
+        .section {
+            background: white;
+            border-radius: 12px;
+            padding: 1.5rem;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+            border: 1px solid #e1e8ed;
+        }
+        
+        .section-title {
+            font-size: 1.3rem;
+            font-weight: 600;
+            color: #667eea;
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .form-group {
+            margin-bottom: 1rem;
+        }
+        
+        .form-group label {
+            display: block;
+            font-weight: 500;
+            color: #555;
+            margin-bottom: 0.5rem;
+        }
+        
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            width: 100%;
+            padding: 0.75rem;
+            border: 2px solid #e1e8ed;
+            border-radius: 8px;
+            font-size: 0.95rem;
+            transition: border-color 0.3s ease;
+        }
+        
+        .form-group input:focus,
+        .form-group select:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+        
+        .form-group textarea {
+            resize: vertical;
+            min-height: 100px;
+        }
+        
+        .checkbox-group {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+        
+        .checkbox-item {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .checkbox-item input[type="checkbox"] {
+            width: auto;
+        }
+        
+        .btn {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 0.75rem 1.5rem;
+            border-radius: 8px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(102, 126, 234, 0.3);
+        }
+        
+        .btn-secondary {
+            background: #6c757d;
+        }
+        
+        .btn-success {
+            background: #28a745;
+        }
+        
+        .btn-danger {
+            background: #dc3545;
+        }
+        
+        .progress-bar {
+            width: 100%;
+            height: 8px;
+            background: #e1e8ed;
+            border-radius: 4px;
+            overflow: hidden;
+            margin: 1rem 0;
+        }
+        
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #667eea, #764ba2);
+            width: 0%;
+            transition: width 0.3s ease;
+        }
+        
+        .results-container {
+            grid-column: 1 / -1;
+            margin-top: 1rem;
+        }
+        
+        .prospect-card {
+            background: white;
+            border: 1px solid #e1e8ed;
+            border-radius: 8px;
+            padding: 1rem;
+            margin-bottom: 1rem;
+            transition: all 0.3s ease;
+        }
+        
+        .prospect-card:hover {
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            transform: translateY(-2px);
+        }
+        
+        .prospect-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 0.5rem;
+        }
+        
+        .prospect-name {
+            font-weight: 600;
+            color: #333;
+        }
+        
+        .prospect-company {
+            color: #667eea;
+            font-weight: 500;
+        }
+        
+        .prospect-title {
+            color: #666;
+            font-size: 0.9rem;
+        }
+        
+        .prospect-actions {
+            display: flex;
+            gap: 0.5rem;
+            margin-top: 1rem;
+        }
+        
+        .status-badge {
+            padding: 0.25rem 0.75rem;
+            border-radius: 15px;
+            font-size: 0.8rem;
+            font-weight: 500;
+        }
+        
+        .status-pending {
+            background: #fff3cd;
+            color: #856404;
+        }
+        
+        .status-contacted {
+            background: #d4edda;
+            color: #155724;
+        }
+        
+        .status-interested {
+            background: #cce7ff;
+            color: #004085;
+        }
+        
+        .status-meeting {
+            background: #e7d4ff;
+            color: #5a2d91;
+        }
+        
+        .logs-section {
+            grid-column: 1 / -1;
+            background: #f8f9fa;
+            border-radius: 8px;
+            padding: 1rem;
+            font-family: 'Courier New', monospace;
+            font-size: 0.85rem;
+            max-height: 300px;
+            overflow-y: auto;
+        }
+        
+        .log-entry {
+            margin: 0.25rem 0;
+            padding: 0.25rem;
+            border-radius: 4px;
+        }
+        
+        .log-info {
+            color: #0066cc;
+        }
+        
+        .log-success {
+            color: #28a745;
+            background: rgba(40, 167, 69, 0.1);
+        }
+        
+        .log-warning {
+            color: #ffc107;
+            background: rgba(255, 193, 7, 0.1);
+        }
+        
+        .log-error {
+            color: #dc3545;
+            background: rgba(220, 53, 69, 0.1);
+        }
+        
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 1rem;
+            margin: 1rem 0;
+        }
+        
+        .stat-card {
+            background: #f8f9fa;
+            padding: 1rem;
+            border-radius: 8px;
+            text-align: center;
+        }
+        
+        .stat-number {
+            font-size: 2rem;
+            font-weight: bold;
+            color: #667eea;
+        }
+        
+        .stat-label {
+            font-size: 0.9rem;
+            color: #666;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>🎯 Graixl Prospection - Outil Opérationnel</h1>
+        <p>Prospection automatisée LinkedIn → Email → Relances → Rendez-vous</p>
+    </div>
+
+    <div class="main-container">
+        <!-- Configuration de la recherche LinkedIn -->
+        <div class="section">
+            <div class="section-title">
+                <span>🔍</span>
+                Configuration Recherche LinkedIn
+            </div>
+            
+            <div class="form-group">
+                <label>Mots-clés de recherche</label>
+                <input type="text" id="keywords" placeholder="CEO, CTO, Directeur Marketing, Responsable Digital..." value="CEO OR CTO OR &quot;Directeur Marketing&quot; OR &quot;Responsable Digital&quot;">
+            </div>
+            
+            <div class="form-group">
+                <label>Secteurs d'activité</label>
+                <input type="text" id="industries" placeholder="Software, Technology, SaaS, Digital Agency..." value="Software Development,Information Technology,Marketing Services,Digital Marketing">
+            </div>
+            
+            <div class="form-group">
+                <label>Taille d'entreprise</label>
+                <select id="companySize">
+                    <option value="11-50">11-50 employés</option>
+                    <option value="51-200" selected>51-200 employés</option>
+                    <option value="201-500">201-500 employés</option>
+                    <option value="501-1000">501-1000 employés</option>
+                    <option value="1001-5000">1001-5000 employés</option>
+                </select>
+            </div>
+            
+            <div class="form-group">
+                <label>Localisation</label>
+                <select id="location">
+                    <option value="France" selected>France</option>
+                    <option value="Paris">Région Parisienne</option>
+                    <option value="Lyon">Lyon</option>
+                    <option value="Marseille">Marseille</option>
+                    <option value="Toulouse">Toulouse</option>
+                    <option value="Europe">Europe</option>
+                </select>
+            </div>
+            
+            <div class="form-group">
+                <label>Nombre de prospects cibles</label>
+                <input type="number" id="targetCount" value="50" min="10" max="500">
+            </div>
+            
+            <button class="btn" onclick="startLinkedInSearch()">
+                <span>🚀</span> Lancer la Recherche LinkedIn
+            </button>
+        </div>
+
+        <!-- Configuration des messages -->
+        <div class="section">
+            <div class="section-title">
+                <span>✉️</span>
+                Configuration Messages & Relances
+            </div>
+            
+            <div class="form-group">
+                <label>Canaux de contact</label>
+                <div class="checkbox-group">
+                    <div class="checkbox-item">
+                        <input type="checkbox" id="useLinkedIn" checked>
+                        <label for="useLinkedIn">LinkedIn (message direct)</label>
+                    </div>
+                    <div class="checkbox-item">
+                        <input type="checkbox" id="useEmail" checked>
+                        <label for="useEmail">Email (recherche automatique)</label>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="form-group">
+                <label>Message LinkedIn (1er contact)</label>
+                <textarea id="linkedinMessage" placeholder="Message de prise de contact LinkedIn...">Bonjour [PRENOM],
+
+J'ai remarqué votre expertise en [SECTEUR] chez [ENTREPRISE]. 
+
+Je développe Graixl, une solution d'IA qui révolutionne la prospection B2B avec une architecture hexagonale et des agents intelligents coordonnés.
+
+Seriez-vous disponible pour un échange de 15 minutes sur les défis de prospection dans votre secteur ? Je pourrais vous montrer comment nos clients obtiennent +300% de prospects qualifiés.
+
+Cordialement,
+[VOTRE_NOM]</textarea>
+            </div>
+            
+            <div class="form-group">
+                <label>Email de suivi (si pas de réponse LinkedIn)</label>
+                <textarea id="followUpEmail" placeholder="Email de relance...">Objet: [ENTREPRISE] - Solution IA pour votre prospection B2B
+
+Bonjour [PRENOM],
+
+Je vous ai contacté sur LinkedIn concernant Graixl, notre solution d'IA révolutionnaire pour la prospection B2B.
+
+Nos clients comme [ENTREPRISE_SIMILAIRE] ont multiplié par 3 leurs prospects qualifiés grâce à notre architecture hexagonale avec agents IA coordonnés.
+
+Quelques résultats concrets :
+• 89% de précision sur la qualification prospects
+• 600x plus rapide que les méthodes classiques
+• ROI moyen de 450% en 3 mois
+
+Seriez-vous intéressé par une démo de 15 minutes cette semaine ?
+
+Cordialement,
+[VOTRE_NOM]
+[VOTRE_TELEPHONE]
+graixl.com</textarea>
+            </div>
+            
+            <div class="form-group">
+                <label>Délai entre les relances (jours)</label>
+                <input type="number" id="followUpDelay" value="3" min="1" max="14">
+            </div>
+            
+            <div class="form-group">
+                <label>Nombre max de relances</label>
+                <input type="number" id="maxFollowUps" value="2" min="1" max="5">
+            </div>
+        </div>
+
+        <!-- Tableau de bord temps réel -->
+        <div class="section">
+            <div class="section-title">
+                <span>📊</span>
+                Tableau de Bord Temps Réel
+            </div>
+            
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-number" id="totalProspects">0</div>
+                    <div class="stat-label">Prospects Trouvés</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number" id="emailsFound">0</div>
+                    <div class="stat-label">Emails Trouvés</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number" id="messagesSent">0</div>
+                    <div class="stat-label">Messages Envoyés</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number" id="responses">0</div>
+                    <div class="stat-label">Réponses Reçues</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number" id="meetings">0</div>
+                    <div class="stat-label">RDV Programmés</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number" id="conversionRate">0%</div>
+                    <div class="stat-label">Taux Conversion</div>
+                </div>
+            </div>
+            
+            <div class="progress-bar">
+                <div class="progress-fill" id="overallProgress"></div>
+            </div>
+            <p style="text-align: center; margin-top: 0.5rem; color: #666;">
+                Progression globale de la campagne
+            </p>
+        </div>
+
+        <!-- Contrôles de campagne -->
+        <div class="section">
+            <div class="section-title">
+                <span>⚡</span>
+                Contrôles de Campagne
+            </div>
+            
+            <div style="display: flex; gap: 1rem; margin-bottom: 1rem;">
+                <button class="btn btn-success" onclick="startCampaign()" id="startBtn">
+                    <span>▶️</span> Démarrer la Campagne
+                </button>
+                <button class="btn btn-secondary" onclick="pauseCampaign()" id="pauseBtn" disabled>
+                    <span>⏸️</span> Pause
+                </button>
+                <button class="btn btn-danger" onclick="stopCampaign()" id="stopBtn" disabled>
+                    <span>⏹️</span> Arrêter
+                </button>
+            </div>
+            
+            <div class="form-group">
+                <label>Mode de fonctionnement</label>
+                <select id="campaignMode">
+                    <option value="auto">Automatique (24/7)</option>
+                    <option value="business_hours" selected>Heures ouvrables seulement</option>
+                    <option value="manual">Manuel (validation requise)</option>
+                </select>
+            </div>
+            
+            <div class="form-group">
+                <label>Vitesse d'envoi</label>
+                <select id="sendingSpeed">
+                    <option value="conservative">Conservateur (10/jour)</option>
+                    <option value="moderate" selected>Modéré (25/jour)</option>
+                    <option value="aggressive">Agressif (50/jour)</option>
+                </select>
+            </div>
+            
+            <div class="checkbox-item">
+                <input type="checkbox" id="aiOptimization" checked>
+                <label for="aiOptimization">Optimisation IA en temps réel</label>
+            </div>
+        </div>
+
+        <!-- Résultats de prospection -->
+        <div class="results-container">
+            <div class="section">
+                <div class="section-title">
+                    <span>👥</span>
+                    Prospects Identifiés & Statuts
+                </div>
+                
+                <div id="prospectsContainer">
+                    <p style="text-align: center; color: #666; padding: 2rem;">
+                        Aucun prospect trouvé. Lancez une recherche pour commencer.
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Logs d'activité -->
+        <div class="logs-section">
+            <div class="section-title">
+                <span>📋</span>
+                Logs d'Activité en Temps Réel
+            </div>
+            <div id="activityLogs">
+                <div class="log-entry log-info">[INFO] Système de prospection Graixl initialisé</div>
+                <div class="log-entry log-info">[INFO] Architecture hexagonale activée - 6 moteurs IA prêts</div>
+                <div class="log-entry log-info">[INFO] En attente de configuration de campagne...</div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // État global de l'application
+        let campaignState = {
+            isRunning: false,
+            prospects: [],
+            stats: {
+                totalProspects: 0,
+                emailsFound: 0,
+                messagesSent: 0,
+                responses: 0,
+                meetings: 0,
+                conversionRate: 0
+            }
+        };
+
+        // Simulation de prospects
+        const simulatedProspects = [
+            {
+                id: 1,
+                name: "Marie Dubois",
+                title: "Directrice Marketing Digital",
+                company: "TechStart Solutions",
+                industry: "Software Development",
+                location: "Paris",
+                linkedinUrl: "https://linkedin.com/in/mariedubois",
+                email: "marie.dubois@techstart.fr",
+                status: "pending",
+                score: 92
+            },
+            {
+                id: 2,
+                name: "Pierre Martin",
+                title: "CEO & Founder",
+                company: "InnovCorp",
+                industry: "Digital Marketing",
+                location: "Lyon",
+                linkedinUrl: "https://linkedin.com/in/pierremartin",
+                email: "p.martin@innovcorp.com",
+                status: "contacted",
+                score: 88
+            },
+            {
+                id: 3,
+                name: "Sophie Laurent",
+                title: "CTO",
+                company: "DataFlow Systems",
+                industry: "Information Technology",
+                location: "Toulouse",
+                linkedinUrl: "https://linkedin.com/in/sophielaurent",
+                email: "sophie@dataflow.tech",
+                status: "interested",
+                score: 95
+            }
+        ];
+
+        // Fonctions principales avec vraie API
+        async function startLinkedInSearch() {
+            addLog('🔍 Lancement de la recherche LinkedIn avec IA hexagonale...', 'info');
+            
+            const criteria = {
+                keywords: document.getElementById('keywords').value,
+                industries: document.getElementById('industries').value,
+                companySize: document.getElementById('companySize').value,
+                location: document.getElementById('location').value,
+                targetCount: parseInt(document.getElementById('targetCount').value)
+            };
+            
+            addLog(`📋 Critères: ${criteria.keywords} | ${criteria.industries} | ${criteria.companySize} | ${criteria.location}`, 'info');
+            addLog('🤖 Activation des agents IA spécialisés...', 'info');
+            
+            try {
+                updateProgress(10);
+                addLog('🧠 Agent SearchSpecialist: Analyse des profils LinkedIn...', 'info');
+                updateProgress(30);
+                
+                // Appel à la vraie API
+                const response = await fetch('/api/prospection?action=search', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(criteria)
+                });
+                
+                updateProgress(70);
+                addLog('📊 Agent PatternAnalyzer: Analyse des patterns de succès...', 'info');
+                
+                const result = await response.json();
+                
+                if (result.success) {
+                    updateProgress(90);
+                    addLog('⚡ Agent ProspectEnricher: Enrichissement des données prospects...', 'info');
+                    
+                    // Ajout progressif des prospects trouvés
+                    for (let prospect of result.prospects) {
+                        await delay(300);
+                        addProspect(prospect);
+                        campaignState.stats.totalProspects++;
+                        updateStats();
+                    }
+                    
+                    updateProgress(100);
+                    addLog(`✅ Recherche terminée: ${result.results.prospects_found} prospects qualifiés trouvés`, 'success');
+                    addLog(`🎯 Score de qualification: ${(result.results.quality_score * 100).toFixed(1)}/100`, 'success');
+                    addLog(`⚡ Moteurs IA utilisés: ${result.results.ai_engines_used.join(', ')}`, 'info');
+                } else {
+                    throw new Error(result.error);
+                }
+                
+            } catch (error) {
+                addLog(`❌ Erreur lors de la recherche: ${error.message}`, 'error');
+                updateProgress(0);
+            }
+        }
+
+        async function startCampaign() {
+            if (campaignState.prospects.length === 0) {
+                addLog('⚠️ Aucun prospect trouvé. Lancez d\'abord une recherche LinkedIn.', 'warning');
+                return;
+            }
+            
+            campaignState.isRunning = true;
+            document.getElementById('startBtn').disabled = true;
+            document.getElementById('pauseBtn').disabled = false;
+            document.getElementById('stopBtn').disabled = false;
+            
+            addLog('🚀 Démarrage de la campagne de prospection automatisée...', 'info');
+            addLog('🧠 Activation de l\'intelligence collective Graixl...', 'info');
+            
+            const campaignConfig = {
+                name: `Campagne Graixl ${new Date().toLocaleDateString()}`,
+                useLinkedIn: document.getElementById('useLinkedIn').checked,
+                useEmail: document.getElementById('useEmail').checked,
+                linkedinMessage: document.getElementById('linkedinMessage').value,
+                followUpEmail: document.getElementById('followUpEmail').value,
+                followUpDelay: parseInt(document.getElementById('followUpDelay').value),
+                maxFollowUps: parseInt(document.getElementById('maxFollowUps').value),
+                campaignMode: document.getElementById('campaignMode').value,
+                sendingSpeed: document.getElementById('sendingSpeed').value,
+                aiOptimization: document.getElementById('aiOptimization').checked
+            };
+            
+            try {
+                // Démarrer la campagne via l'API
+                const response = await fetch('/api/prospection?action=start-campaign', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(campaignConfig)
+                });
+                
+                const result = await response.json();
+                
+                if (result.success) {
+                    addLog('✅ Campagne démarrée avec succès via l\'API hexagonale', 'success');
+                    campaignState.activeCampaignId = result.campaign.id;
+                    
+                    // Démarrer le monitoring en temps réel
+                    monitorCampaignProgress();
+                } else {
+                    throw new Error(result.error);
+                }
+                
+            } catch (error) {
+                addLog(`❌ Erreur lors du démarrage de campagne: ${error.message}`, 'error');
+                campaignState.isRunning = false;
+                document.getElementById('startBtn').disabled = false;
+                document.getElementById('pauseBtn').disabled = true;
+                document.getElementById('stopBtn').disabled = true;
+            }
+        }
+        
+        // Monitoring en temps réel de la campagne
+        async function monitorCampaignProgress() {
+            if (!campaignState.isRunning) return;
+            
+            try {
+                // Récupérer les stats mises à jour
+                const statsResponse = await fetch('/api/prospection?action=get-stats');
+                const statsResult = await statsResponse.json();
+                
+                if (statsResult.success) {
+                    const stats = statsResult.stats;
+                    campaignState.stats = stats;
+                    updateStats();
+                    
+                    // Récupérer les prospects mis à jour
+                    const prospectsResponse = await fetch('/api/prospection?action=get-prospects');
+                    const prospectsResult = await prospectsResponse.json();
+                    
+                    if (prospectsResult.success) {
+                        // Mettre à jour l'affichage des prospects
+                        updateProspectsDisplay(prospectsResult.prospects);
+                    }
+                }
+                
+                // Continuer le monitoring
+                if (campaignState.isRunning) {
+                    setTimeout(monitorCampaignProgress, 3000);
+                }
+                
+            } catch (error) {
+                addLog(`⚠️ Erreur monitoring: ${error.message}`, 'warning');
+                setTimeout(monitorCampaignProgress, 5000);
+            }
+        }
+
+        async function pauseCampaign() {
+            if (!campaignState.activeCampaignId) {
+                addLog('⚠️ Aucune campagne active à mettre en pause', 'warning');
+                return;
+            }
+            
+            try {
+                const response = await fetch('/api/prospection?action=pause-campaign', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ campaignId: campaignState.activeCampaignId })
+                });
+                
+                const result = await response.json();
+                
+                if (result.success) {
+                    campaignState.isRunning = false;
+                    document.getElementById('startBtn').disabled = false;
+                    document.getElementById('pauseBtn').disabled = true;
+                    addLog('⏸️ Campagne mise en pause via API', 'warning');
+                } else {
+                    throw new Error(result.error);
+                }
+                
+            } catch (error) {
+                addLog(`❌ Erreur pause campagne: ${error.message}`, 'error');
+            }
+        }
+
+        async function stopCampaign() {
+            if (!campaignState.activeCampaignId) {
+                addLog('⚠️ Aucune campagne active à arrêter', 'warning');
+                return;
+            }
+            
+            try {
+                const response = await fetch('/api/prospection?action=stop-campaign', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ campaignId: campaignState.activeCampaignId })
+                });
+                
+                const result = await response.json();
+                
+                if (result.success) {
+                    campaignState.isRunning = false;
+                    campaignState.activeCampaignId = null;
+                    document.getElementById('startBtn').disabled = false;
+                    document.getElementById('pauseBtn').disabled = true;
+                    document.getElementById('stopBtn').disabled = true;
+                    addLog('⏹️ Campagne arrêtée via API', 'warning');
+                } else {
+                    throw new Error(result.error);
+                }
+                
+            } catch (error) {
+                addLog(`❌ Erreur arrêt campagne: ${error.message}`, 'error');
+            }
+        }
+        
+        // Mettre à jour l'affichage des prospects
+        function updateProspectsDisplay(prospects) {
+            const container = document.getElementById('prospectsContainer');
+            
+            // Parcourir les prospects mis à jour
+            prospects.forEach(prospect => {
+                const existingCard = document.getElementById(`prospect_${prospect.id}`);
+                if (existingCard) {
+                    // Mettre à jour le statut et les informations
+                    const statusBadge = existingCard.querySelector('.status-badge');
+                    if (statusBadge) {
+                        statusBadge.className = `status-badge status-${prospect.status}`;
+                        statusBadge.textContent = getStatusText(prospect.status);
+                    }
+                    
+                    // Ajouter l'email s'il a été trouvé
+                    if (prospect.email && !existingCard.querySelector('.prospect-email')) {
+                        const emailDiv = document.createElement('div');
+                        emailDiv.className = 'prospect-email';
+                        emailDiv.style.fontSize = '0.8rem';
+                        emailDiv.style.color = '#666';
+                        emailDiv.innerHTML = `✉️ ${prospect.email}`;
+                        existingCard.querySelector('.prospect-header').appendChild(emailDiv);
+                    }
+                } else {
+                    // Nouveau prospect, l'ajouter
+                    addProspect(prospect);
+                }
+            });
+        }
+
+        function addProspect(prospect) {
+            campaignState.prospects.push(prospect);
+            
+            const container = document.getElementById('prospectsContainer');
+            if (container.children[0]?.tagName === 'P') {
+                container.innerHTML = ''; // Enlever le message "Aucun prospect"
+            }
+            
+            const prospectCard = document.createElement('div');
+            prospectCard.className = 'prospect-card';
+            prospectCard.id = `prospect_${prospect.id}`;
+            
+            prospectCard.innerHTML = `
+                <div class="prospect-header">
+                    <div>
+                        <div class="prospect-name">${prospect.name}</div>
+                        <div class="prospect-company">${prospect.company}</div>
+                        <div class="prospect-title">${prospect.title}</div>
+                    </div>
+                    <div>
+                        <span class="status-badge status-${prospect.status}">
+                            ${getStatusText(prospect.status)}
+                        </span>
+                        <div style="font-size: 0.8rem; color: #666; margin-top: 0.25rem;">
+                            Score: ${prospect.score}/100
+                        </div>
+                    </div>
+                </div>
+                <div style="font-size: 0.9rem; color: #666; margin: 0.5rem 0;">
+                    📍 ${prospect.location} • 🏢 ${prospect.industry}
+                </div>
+                <div class="prospect-actions">
+                    <button class="btn" style="font-size: 0.8rem; padding: 0.5rem 1rem;" onclick="viewProspectDetails(${prospect.id})">
+                        👁️ Détails
+                    </button>
+                    <button class="btn btn-secondary" style="font-size: 0.8rem; padding: 0.5rem 1rem;" onclick="sendCustomMessage(${prospect.id})">
+                        ✉️ Message Perso
+                    </button>
+                </div>
+            `;
+            
+            container.appendChild(prospectCard);
+            addLog(`➕ Prospect ajouté: ${prospect.name} - ${prospect.company} (Score: ${prospect.score})`, 'info');
+        }
+
+        function updateProspectCard(prospect) {
+            const card = document.getElementById(`prospect_${prospect.id}`);
+            if (card) {
+                const statusBadge = card.querySelector('.status-badge');
+                statusBadge.className = `status-badge status-${prospect.status}`;
+                statusBadge.textContent = getStatusText(prospect.status);
+            }
+        }
+
+        function getStatusText(status) {
+            const statusMap = {
+                'pending': 'En attente',
+                'contacted': 'Contacté',
+                'interested': 'Intéressé',
+                'meeting': 'RDV Programmé'
+            };
+            return statusMap[status] || status;
+        }
+
+        function updateStats() {
+            document.getElementById('totalProspects').textContent = campaignState.stats.totalProspects;
+            document.getElementById('emailsFound').textContent = campaignState.stats.emailsFound;
+            document.getElementById('messagesSent').textContent = campaignState.stats.messagesSent;
+            document.getElementById('responses').textContent = campaignState.stats.responses;
+            document.getElementById('meetings').textContent = campaignState.stats.meetings;
+            
+            calculateConversionRate();
+        }
+
+        function calculateConversionRate() {
+            if (campaignState.stats.messagesSent > 0) {
+                const rate = (campaignState.stats.meetings / campaignState.stats.messagesSent * 100).toFixed(1);
+                document.getElementById('conversionRate').textContent = rate + '%';
+                campaignState.stats.conversionRate = rate;
+            }
+        }
+
+        function updateProgress(percentage) {
+            document.getElementById('overallProgress').style.width = percentage + '%';
+        }
+
+        function addLog(message, type = 'info') {
+            const logsContainer = document.getElementById('activityLogs');
+            const logEntry = document.createElement('div');
+            logEntry.className = `log-entry log-${type}`;
+            logEntry.textContent = `[${new Date().toLocaleTimeString()}] ${message}`;
+            
+            logsContainer.appendChild(logEntry);
+            logsContainer.scrollTop = logsContainer.scrollHeight;
+            
+            // Limiter le nombre de logs
+            if (logsContainer.children.length > 50) {
+                logsContainer.removeChild(logsContainer.firstChild);
+            }
+        }
+
+        function viewProspectDetails(prospectId) {
+            const prospect = campaignState.prospects.find(p => p.id === prospectId);
+            if (prospect) {
+                alert(`Détails du prospect:
+                
+Nom: ${prospect.name}
+Entreprise: ${prospect.company}
+Poste: ${prospect.title}
+LinkedIn: ${prospect.linkedinUrl}
+Email: ${prospect.email || 'Recherche en cours...'}
+Score de qualification: ${prospect.score}/100
+Statut: ${getStatusText(prospect.status)}`);
+            }
+        }
+
+        async function sendCustomMessage(prospectId) {
+            const prospect = campaignState.prospects.find(p => p.id === prospectId);
+            if (!prospect) {
+                addLog('❌ Prospect non trouvé', 'error');
+                return;
+            }
+            
+            const message = prompt(`Message personnalisé pour ${prospect.name}:`, 
+                `Bonjour ${prospect.name.split(' ')[0]}, j'aimerais vous présenter Graixl spécifiquement pour ${prospect.company}...`);
+            
+            if (!message) return;
+            
+            try {
+                const response = await fetch('/api/prospection?action=send-message', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        prospectId: `prospect_${prospect.id}`,
+                        message: message,
+                        channel: 'linkedin'
+                    })
+                });
+                
+                const result = await response.json();
+                
+                if (result.success) {
+                    addLog(`📝 Message personnalisé envoyé à ${prospect.name} via API`, 'info');
+                    prospect.status = 'contacted';
+                    campaignState.stats.messagesSent++;
+                    updateProspectCard(prospect);
+                    updateStats();
+                } else {
+                    throw new Error(result.error);
+                }
+                
+            } catch (error) {
+                addLog(`❌ Erreur envoi message: ${error.message}`, 'error');
+            }
+        }
+
+        function delay(ms) {
+            return new Promise(resolve => setTimeout(resolve, ms));
+        }
+
+        // Initialisation
+        document.addEventListener('DOMContentLoaded', () => {
+            addLog('🎯 Interface de prospection Graixl initialisée', 'success');
+            addLog('📊 Architecture hexagonale prête pour la prospection opérationnelle', 'info');
+        });
+    </script>
+</body>
+</html>

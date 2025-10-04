@@ -1,0 +1,1310 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>👥 Pipeline Prospects - Graixl</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #f8fafc;
+            color: #334155;
+            line-height: 1.6;
+        }
+        
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 1rem 2rem;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+        }
+        
+        .header-content {
+            max-width: 1600px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .header h1 {
+            font-size: 1.8rem;
+            font-weight: 600;
+        }
+        
+        .header-actions {
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+        }
+        
+        .btn {
+            background: rgba(255,255,255,0.2);
+            color: white;
+            border: none;
+            padding: 0.75rem 1.5rem;
+            border-radius: 8px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            text-decoration: none;
+        }
+        
+        .btn:hover {
+            background: rgba(255,255,255,0.3);
+            transform: translateY(-2px);
+        }
+        
+        .btn-primary {
+            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+            box-shadow: 0 4px 15px rgba(16, 185, 129, 0.3);
+        }
+        
+        .toolbar {
+            max-width: 1600px;
+            margin: 0 auto;
+            padding: 1.5rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: white;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+        }
+        
+        .pipeline-stats {
+            display: flex;
+            gap: 2rem;
+        }
+        
+        .stat-item {
+            text-align: center;
+        }
+        
+        .stat-value {
+            font-size: 2rem;
+            font-weight: bold;
+            color: #667eea;
+        }
+        
+        .stat-label {
+            font-size: 0.9rem;
+            color: #64748b;
+            font-weight: 500;
+        }
+        
+        .pipeline-filters {
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+        }
+        
+        .filter-select {
+            padding: 0.5rem 1rem;
+            border: 2px solid #e5e7eb;
+            border-radius: 6px;
+            background: white;
+            cursor: pointer;
+        }
+        
+        .search-box {
+            position: relative;
+        }
+        
+        .search-box input {
+            padding: 0.5rem 1rem 0.5rem 2.5rem;
+            border: 2px solid #e5e7eb;
+            border-radius: 6px;
+            width: 300px;
+        }
+        
+        .search-box::before {
+            content: '🔍';
+            position: absolute;
+            left: 0.75rem;
+            top: 50%;
+            transform: translateY(-50%);
+        }
+        
+        .kanban-board {
+            max-width: 1600px;
+            margin: 0 auto;
+            padding: 2rem;
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 1.5rem;
+            min-height: calc(100vh - 200px);
+        }
+        
+        .kanban-column {
+            background: #f1f5f9;
+            border-radius: 12px;
+            padding: 1rem;
+            min-height: 600px;
+        }
+        
+        .column-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+            padding: 0.75rem;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+        }
+        
+        .column-title {
+            font-weight: 600;
+            font-size: 1.1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .column-count {
+            background: #667eea;
+            color: white;
+            padding: 0.25rem 0.75rem;
+            border-radius: 15px;
+            font-size: 0.8rem;
+            font-weight: 500;
+        }
+        
+        .prospect-card {
+            background: white;
+            border-radius: 8px;
+            padding: 1rem;
+            margin-bottom: 1rem;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+            border: 1px solid #e5e7eb;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+        
+        .prospect-card:hover {
+            box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+            transform: translateY(-2px);
+        }
+        
+        .prospect-card.dragging {
+            opacity: 0.5;
+            transform: rotate(5deg);
+        }
+        
+        .prospect-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 0.75rem;
+        }
+        
+        .prospect-name {
+            font-weight: 600;
+            color: #1e293b;
+            font-size: 1rem;
+        }
+        
+        .prospect-priority {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            flex-shrink: 0;
+            margin-top: 0.25rem;
+        }
+        
+        .priority-high { background: #ef4444; }
+        .priority-medium { background: #f59e0b; }
+        .priority-low { background: #10b981; }
+        
+        .prospect-company {
+            color: #667eea;
+            font-weight: 500;
+            font-size: 0.9rem;
+            margin-bottom: 0.5rem;
+        }
+        
+        .prospect-title {
+            color: #64748b;
+            font-size: 0.85rem;
+            margin-bottom: 0.75rem;
+        }
+        
+        .prospect-meta {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 0.8rem;
+            color: #94a3b8;
+            margin-bottom: 0.75rem;
+        }
+        
+        .prospect-score {
+            background: #f0f9ff;
+            color: #0369a1;
+            padding: 0.2rem 0.5rem;
+            border-radius: 12px;
+            font-weight: 500;
+        }
+        
+        .prospect-actions {
+            display: flex;
+            gap: 0.5rem;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+        
+        .prospect-card:hover .prospect-actions {
+            opacity: 1;
+        }
+        
+        .action-btn {
+            background: #f8fafc;
+            border: 1px solid #e5e7eb;
+            border-radius: 4px;
+            padding: 0.25rem 0.5rem;
+            cursor: pointer;
+            font-size: 0.8rem;
+            transition: all 0.2s ease;
+        }
+        
+        .action-btn:hover {
+            background: #667eea;
+            color: white;
+            border-color: #667eea;
+        }
+        
+        .prospect-tags {
+            display: flex;
+            gap: 0.25rem;
+            flex-wrap: wrap;
+            margin-top: 0.5rem;
+        }
+        
+        .tag {
+            background: #f1f5f9;
+            color: #475569;
+            padding: 0.2rem 0.5rem;
+            border-radius: 10px;
+            font-size: 0.7rem;
+            font-weight: 500;
+        }
+        
+        .tag.linkedin { background: #dbeafe; color: #1e40af; }
+        .tag.email { background: #dcfce7; color: #166534; }
+        .tag.phone { background: #fef3c7; color: #92400e; }
+        .tag.meeting { background: #f3e8ff; color: #7c3aed; }
+        
+        .column-new { background: #f8fafc; }
+        .column-contacted { background: #fef7ed; }
+        .column-interested { background: #f0f9ff; }
+        .column-meeting { background: #faf5ff; }
+        .column-client { background: #f0fdf4; }
+        
+        .drop-zone {
+            min-height: 100px;
+            border: 2px dashed #cbd5e1;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #94a3b8;
+            font-style: italic;
+            margin-top: 1rem;
+        }
+        
+        .drop-zone.drag-over {
+            border-color: #667eea;
+            background: rgba(102, 126, 234, 0.05);
+            color: #667eea;
+        }
+        
+        .quick-add-btn {
+            width: 100%;
+            padding: 0.75rem;
+            border: 2px dashed #cbd5e1;
+            border-radius: 8px;
+            background: transparent;
+            color: #94a3b8;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-top: 1rem;
+        }
+        
+        .quick-add-btn:hover {
+            border-color: #667eea;
+            color: #667eea;
+            background: rgba(102, 126, 234, 0.02);
+        }
+        
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0,0,0,0.5);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+        }
+        
+        .modal {
+            background: white;
+            border-radius: 12px;
+            padding: 2rem;
+            max-width: 600px;
+            width: 90%;
+            max-height: 80vh;
+            overflow-y: auto;
+        }
+        
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+        }
+        
+        .modal-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: #1e293b;
+        }
+        
+        .close-btn {
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: #94a3b8;
+        }
+        
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+        
+        .form-group label {
+            display: block;
+            font-weight: 500;
+            color: #374151;
+            margin-bottom: 0.5rem;
+        }
+        
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            width: 100%;
+            padding: 0.75rem;
+            border: 2px solid #e5e7eb;
+            border-radius: 6px;
+            font-size: 1rem;
+        }
+        
+        .form-group textarea {
+            resize: vertical;
+            min-height: 100px;
+        }
+        
+        .interaction-history {
+            max-height: 200px;
+            overflow-y: auto;
+            border: 1px solid #e5e7eb;
+            border-radius: 6px;
+            padding: 1rem;
+        }
+        
+        .interaction-item {
+            display: flex;
+            gap: 0.75rem;
+            margin-bottom: 1rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid #f1f5f9;
+        }
+        
+        .interaction-item:last-child {
+            border-bottom: none;
+            margin-bottom: 0;
+            padding-bottom: 0;
+        }
+        
+        .interaction-icon {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.9rem;
+            color: white;
+            flex-shrink: 0;
+        }
+        
+        .interaction-linkedin { background: #0a66c2; }
+        .interaction-email { background: #10b981; }
+        .interaction-phone { background: #f59e0b; }
+        .interaction-meeting { background: #8b5cf6; }
+        
+        .interaction-content {
+            flex: 1;
+        }
+        
+        .interaction-title {
+            font-weight: 500;
+            color: #1e293b;
+            margin-bottom: 0.25rem;
+        }
+        
+        .interaction-description {
+            color: #64748b;
+            font-size: 0.9rem;
+            margin-bottom: 0.25rem;
+        }
+        
+        .interaction-time {
+            color: #94a3b8;
+            font-size: 0.8rem;
+        }
+        
+        @media (max-width: 1200px) {
+            .kanban-board {
+                grid-template-columns: repeat(3, 1fr);
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .kanban-board {
+                grid-template-columns: 1fr;
+                gap: 1rem;
+            }
+            
+            .header-content {
+                flex-direction: column;
+                gap: 1rem;
+            }
+            
+            .toolbar {
+                flex-direction: column;
+                gap: 1rem;
+            }
+            
+            .pipeline-stats {
+                gap: 1rem;
+            }
+            
+            .search-box input {
+                width: 250px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <div class="header-content">
+            <h1>👥 Pipeline de Prospects</h1>
+            <div class="header-actions">
+                <a href="/dashboard-prospection" class="btn">
+                    <span>←</span> Dashboard
+                </a>
+                <button class="btn btn-primary" onclick="addProspect()">
+                    <span>➕</span> Ajouter Prospect
+                </button>
+                <button class="btn" onclick="importProspects()">
+                    <span>📥</span> Importer
+                </button>
+                <button class="btn" onclick="exportPipeline()">
+                    <span>📤</span> Exporter
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <div class="toolbar">
+        <div class="pipeline-stats">
+            <div class="stat-item">
+                <div class="stat-value" id="totalProspects">127</div>
+                <div class="stat-label">Total Prospects</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-value" id="activeConversations">34</div>
+                <div class="stat-label">Conversations</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-value" id="scheduledMeetings">8</div>
+                <div class="stat-label">RDV Programmés</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-value" id="conversionRate">18%</div>
+                <div class="stat-label">Taux Conversion</div>
+            </div>
+        </div>
+        
+        <div class="pipeline-filters">
+            <select class="filter-select" id="campaignFilter">
+                <option value="">Toutes les campagnes</option>
+                <option value="saas">Directeurs Marketing SaaS</option>
+                <option value="cto">CTOs Startups Paris</option>
+                <option value="ecommerce">CEOs E-commerce Lyon</option>
+            </select>
+            
+            <select class="filter-select" id="priorityFilter">
+                <option value="">Toutes priorités</option>
+                <option value="high">Priorité haute</option>
+                <option value="medium">Priorité moyenne</option>
+                <option value="low">Priorité basse</option>
+            </select>
+            
+            <div class="search-box">
+                <input type="text" id="searchInput" placeholder="Rechercher un prospect..." 
+                       oninput="filterProspects()">
+            </div>
+        </div>
+    </div>
+
+    <div class="kanban-board">
+        <!-- Nouveaux prospects -->
+        <div class="kanban-column column-new" data-status="new">
+            <div class="column-header">
+                <div class="column-title">
+                    <span>🆕</span> Nouveaux
+                </div>
+                <div class="column-count" id="count-new">15</div>
+            </div>
+            <div class="prospects-container" id="prospects-new">
+                <!-- Les prospects seront ajoutés ici -->
+            </div>
+            <button class="quick-add-btn" onclick="quickAddProspect('new')">
+                ➕ Ajouter prospect
+            </button>
+        </div>
+
+        <!-- Prospects contactés -->
+        <div class="kanban-column column-contacted" data-status="contacted">
+            <div class="column-header">
+                <div class="column-title">
+                    <span>📧</span> Contactés
+                </div>
+                <div class="column-count" id="count-contacted">42</div>
+            </div>
+            <div class="prospects-container" id="prospects-contacted">
+                <!-- Les prospects seront ajoutés ici -->
+            </div>
+        </div>
+
+        <!-- Prospects intéressés -->
+        <div class="kanban-column column-interested" data-status="interested">
+            <div class="column-header">
+                <div class="column-title">
+                    <span>💬</span> Intéressés
+                </div>
+                <div class="column-count" id="count-interested">28</div>
+            </div>
+            <div class="prospects-container" id="prospects-interested">
+                <!-- Les prospects seront ajoutés ici -->
+            </div>
+        </div>
+
+        <!-- RDV programmés -->
+        <div class="kanban-column column-meeting" data-status="meeting">
+            <div class="column-header">
+                <div class="column-title">
+                    <span>📅</span> RDV
+                </div>
+                <div class="column-count" id="count-meeting">8</div>
+            </div>
+            <div class="prospects-container" id="prospects-meeting">
+                <!-- Les prospects seront ajoutés ici -->
+            </div>
+        </div>
+
+        <!-- Clients -->
+        <div class="kanban-column column-client" data-status="client">
+            <div class="column-header">
+                <div class="column-title">
+                    <span>✅</span> Clients
+                </div>
+                <div class="column-count" id="count-client">5</div>
+            </div>
+            <div class="prospects-container" id="prospects-client">
+                <!-- Les prospects seront ajoutés ici -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal détails prospect -->
+    <div class="modal-overlay" id="prospectModal">
+        <div class="modal">
+            <div class="modal-header">
+                <div class="modal-title" id="modalTitle">Détails du prospect</div>
+                <button class="close-btn" onclick="closeModal()">&times;</button>
+            </div>
+            
+            <div id="modalContent">
+                <!-- Le contenu sera généré dynamiquement -->
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Données de démo pour les prospects
+        const prospects = [
+            {
+                id: 1,
+                name: "Marie Dubois",
+                company: "TechStart Solutions",
+                title: "Directrice Marketing Digital",
+                email: "marie.dubois@techstart.fr",
+                phone: "+33 6 12 34 56 78",
+                status: "new",
+                priority: "high",
+                score: 92,
+                campaign: "saas",
+                addedDate: "2024-03-15",
+                lastContact: null,
+                tags: ["linkedin"],
+                interactions: []
+            },
+            {
+                id: 2,
+                name: "Pierre Martin",
+                company: "InnovCorp",
+                title: "CEO & Founder",
+                email: "p.martin@innovcorp.com",
+                phone: "+33 6 98 76 54 32",
+                status: "contacted",
+                priority: "high",
+                score: 88,
+                campaign: "saas",
+                addedDate: "2024-03-10",
+                lastContact: "2024-03-16",
+                tags: ["linkedin", "email"],
+                interactions: [
+                    {
+                        type: "linkedin",
+                        title: "Message LinkedIn envoyé",
+                        description: "Premier contact pour présenter Graixl",
+                        date: "2024-03-16 09:30"
+                    }
+                ]
+            },
+            {
+                id: 3,
+                name: "Sophie Laurent",
+                company: "DataFlow Systems",
+                title: "CTO",
+                email: "sophie@dataflow.tech",
+                phone: "+33 6 11 22 33 44",
+                status: "interested",
+                priority: "high",
+                score: 95,
+                campaign: "cto",
+                addedDate: "2024-03-12",
+                lastContact: "2024-03-17",
+                tags: ["linkedin", "email", "phone"],
+                interactions: [
+                    {
+                        type: "linkedin",
+                        title: "Message LinkedIn envoyé",
+                        description: "Premier contact pour présenter Graixl",
+                        date: "2024-03-16 14:15"
+                    },
+                    {
+                        type: "email",
+                        title: "Réponse positive reçue",
+                        description: "Intéressée par une démo de Graixl",
+                        date: "2024-03-17 10:20"
+                    }
+                ]
+            },
+            {
+                id: 4,
+                name: "Thomas Rousseau",
+                company: "SalesForce France",
+                title: "Directeur Commercial",
+                email: "thomas@salesforce.fr",
+                phone: "+33 6 55 66 77 88",
+                status: "meeting",
+                priority: "high",
+                score: 85,
+                campaign: "saas",
+                addedDate: "2024-03-08",
+                lastContact: "2024-03-18",
+                tags: ["linkedin", "email", "meeting"],
+                interactions: [
+                    {
+                        type: "linkedin",
+                        title: "Message LinkedIn envoyé",
+                        description: "Premier contact pour présenter Graixl",
+                        date: "2024-03-15 11:00"
+                    },
+                    {
+                        type: "email",
+                        title: "Email de suivi envoyé",
+                        description: "Relance après le message LinkedIn",
+                        date: "2024-03-17 16:30"
+                    },
+                    {
+                        type: "meeting",
+                        title: "RDV programmé",
+                        description: "Démo Graixl prévue le 20/03 à 15h",
+                        date: "2024-03-18 09:45"
+                    }
+                ]
+            },
+            {
+                id: 5,
+                name: "Julie Chen",
+                company: "StartupX",
+                title: "Head of Growth",
+                email: "julie@startupx.io",
+                phone: "+33 6 99 88 77 66",
+                status: "client",
+                priority: "medium",
+                score: 90,
+                campaign: "saas",
+                addedDate: "2024-03-01",
+                lastContact: "2024-03-19",
+                tags: ["linkedin", "email", "meeting", "client"],
+                interactions: [
+                    {
+                        type: "linkedin",
+                        title: "Message LinkedIn envoyé",
+                        description: "Premier contact pour présenter Graixl",
+                        date: "2024-03-05 14:20"
+                    },
+                    {
+                        type: "email",
+                        title: "Réponse positive reçue",
+                        description: "Très intéressée par Graixl",
+                        date: "2024-03-06 09:15"
+                    },
+                    {
+                        type: "meeting",
+                        title: "Démo réalisée",
+                        description: "Présentation complète de Graixl",
+                        date: "2024-03-08 15:00"
+                    },
+                    {
+                        type: "email",
+                        title: "Contrat signé",
+                        description: "Nouveau client Graixl !",
+                        date: "2024-03-19 11:30"
+                    }
+                ]
+            }
+        ];
+
+        let filteredProspects = [...prospects];
+        let draggedProspect = null;
+
+        // Fonctions principales
+        function loadProspects() {
+            // Vider toutes les colonnes
+            document.querySelectorAll('.prospects-container').forEach(container => {
+                container.innerHTML = '';
+            });
+
+            // Grouper par statut et afficher
+            const statusGroups = groupBy(filteredProspects, 'status');
+            
+            Object.keys(statusGroups).forEach(status => {
+                const container = document.getElementById(`prospects-${status}`);
+                if (container) {
+                    statusGroups[status].forEach(prospect => {
+                        container.appendChild(createProspectCard(prospect));
+                    });
+                }
+            });
+
+            updateColumnCounts();
+            updateStats();
+        }
+
+        function createProspectCard(prospect) {
+            const card = document.createElement('div');
+            card.className = 'prospect-card';
+            card.draggable = true;
+            card.dataset.prospectId = prospect.id;
+            
+            card.innerHTML = `
+                <div class="prospect-header">
+                    <div class="prospect-name">${prospect.name}</div>
+                    <div class="prospect-priority priority-${prospect.priority}"></div>
+                </div>
+                
+                <div class="prospect-company">${prospect.company}</div>
+                <div class="prospect-title">${prospect.title}</div>
+                
+                <div class="prospect-meta">
+                    <span>Ajouté: ${formatDate(prospect.addedDate)}</span>
+                    <span class="prospect-score">Score: ${prospect.score}</span>
+                </div>
+                
+                <div class="prospect-tags">
+                    ${prospect.tags.map(tag => `<span class="tag ${tag}">${getTagLabel(tag)}</span>`).join('')}
+                </div>
+                
+                <div class="prospect-actions">
+                    <button class="action-btn" onclick="contactProspect(${prospect.id})">📧</button>
+                    <button class="action-btn" onclick="scheduleCall(${prospect.id})">📞</button>
+                    <button class="action-btn" onclick="viewProspect(${prospect.id})">👁️</button>
+                </div>
+            `;
+
+            // Événements drag & drop
+            card.addEventListener('dragstart', handleDragStart);
+            card.addEventListener('click', () => viewProspect(prospect.id));
+
+            return card;
+        }
+
+        function groupBy(array, key) {
+            return array.reduce((groups, item) => {
+                const value = item[key];
+                if (!groups[value]) {
+                    groups[value] = [];
+                }
+                groups[value].push(item);
+                return groups;
+            }, {});
+        }
+
+        function updateColumnCounts() {
+            const statusCounts = groupBy(filteredProspects, 'status');
+            
+            ['new', 'contacted', 'interested', 'meeting', 'client'].forEach(status => {
+                const count = statusCounts[status] ? statusCounts[status].length : 0;
+                const element = document.getElementById(`count-${status}`);
+                if (element) {
+                    element.textContent = count;
+                }
+            });
+        }
+
+        function updateStats() {
+            const total = prospects.length;
+            const conversations = prospects.filter(p => p.status !== 'new').length;
+            const meetings = prospects.filter(p => p.status === 'meeting' || p.status === 'client').length;
+            const clients = prospects.filter(p => p.status === 'client').length;
+            const conversionRate = total > 0 ? Math.round((clients / total) * 100) : 0;
+
+            document.getElementById('totalProspects').textContent = total;
+            document.getElementById('activeConversations').textContent = conversations;
+            document.getElementById('scheduledMeetings').textContent = meetings;
+            document.getElementById('conversionRate').textContent = conversionRate + '%';
+        }
+
+        // Fonctions utilitaires
+        function formatDate(dateString) {
+            const date = new Date(dateString);
+            return date.toLocaleDateString('fr-FR', { 
+                day: '2-digit', 
+                month: '2-digit' 
+            });
+        }
+
+        function getTagLabel(tag) {
+            const labels = {
+                linkedin: 'LI',
+                email: '@',
+                phone: '📞',
+                meeting: '📅',
+                client: '✓'
+            };
+            return labels[tag] || tag;
+        }
+
+        function filterProspects() {
+            const searchTerm = document.getElementById('searchInput').value.toLowerCase();
+            const campaignFilter = document.getElementById('campaignFilter').value;
+            const priorityFilter = document.getElementById('priorityFilter').value;
+
+            filteredProspects = prospects.filter(prospect => {
+                const matchesSearch = prospect.name.toLowerCase().includes(searchTerm) ||
+                                     prospect.company.toLowerCase().includes(searchTerm) ||
+                                     prospect.title.toLowerCase().includes(searchTerm);
+                
+                const matchesCampaign = !campaignFilter || prospect.campaign === campaignFilter;
+                const matchesPriority = !priorityFilter || prospect.priority === priorityFilter;
+
+                return matchesSearch && matchesCampaign && matchesPriority;
+            });
+
+            loadProspects();
+        }
+
+        // Drag & Drop
+        function handleDragStart(e) {
+            draggedProspect = this;
+            this.classList.add('dragging');
+            e.dataTransfer.effectAllowed = 'move';
+            e.dataTransfer.setData('text/html', this.outerHTML);
+        }
+
+        function setupDropZones() {
+            document.querySelectorAll('.kanban-column').forEach(column => {
+                column.addEventListener('dragover', handleDragOver);
+                column.addEventListener('drop', handleDrop);
+                column.addEventListener('dragenter', handleDragEnter);
+                column.addEventListener('dragleave', handleDragLeave);
+            });
+        }
+
+        function handleDragOver(e) {
+            e.preventDefault();
+            e.dataTransfer.dropEffect = 'move';
+        }
+
+        function handleDragEnter(e) {
+            e.preventDefault();
+            this.classList.add('drag-over');
+        }
+
+        function handleDragLeave(e) {
+            if (!this.contains(e.relatedTarget)) {
+                this.classList.remove('drag-over');
+            }
+        }
+
+        function handleDrop(e) {
+            e.preventDefault();
+            this.classList.remove('drag-over');
+            
+            if (draggedProspect) {
+                const newStatus = this.dataset.status;
+                const prospectId = parseInt(draggedProspect.dataset.prospectId);
+                
+                // Mettre à jour le statut du prospect
+                const prospect = prospects.find(p => p.id === prospectId);
+                if (prospect) {
+                    prospect.status = newStatus;
+                    prospect.lastContact = new Date().toISOString().split('T')[0];
+                    
+                    // Ajouter une interaction
+                    const statusActions = {
+                        contacted: { type: 'linkedin', title: 'Contact initié', description: 'Prospect contacté via LinkedIn' },
+                        interested: { type: 'email', title: 'Intérêt manifesté', description: 'Prospect a montré de l\'intérêt' },
+                        meeting: { type: 'meeting', title: 'RDV programmé', description: 'Rendez-vous planifié' },
+                        client: { type: 'email', title: 'Conversion client', description: 'Prospect devenu client' }
+                    };
+                    
+                    if (statusActions[newStatus]) {
+                        const action = statusActions[newStatus];
+                        prospect.interactions.push({
+                            ...action,
+                            date: new Date().toLocaleString('fr-FR')
+                        });
+                    }
+                }
+                
+                draggedProspect.classList.remove('dragging');
+                draggedProspect = null;
+                
+                loadProspects();
+            }
+        }
+
+        // Actions sur les prospects
+        function viewProspect(prospectId) {
+            const prospect = prospects.find(p => p.id === prospectId);
+            if (!prospect) return;
+
+            document.getElementById('modalTitle').textContent = `${prospect.name} - ${prospect.company}`;
+            
+            const modalContent = document.getElementById('modalContent');
+            modalContent.innerHTML = `
+                <div class="form-group">
+                    <label>Informations générales</label>
+                    <div style="background: #f8fafc; padding: 1rem; border-radius: 6px;">
+                        <strong>${prospect.name}</strong><br>
+                        ${prospect.title}<br>
+                        ${prospect.company}<br>
+                        Email: ${prospect.email}<br>
+                        Téléphone: ${prospect.phone}<br>
+                        Score: ${prospect.score}/100<br>
+                        Priorité: ${prospect.priority}<br>
+                        Ajouté le: ${formatDate(prospect.addedDate)}
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label>Historique des interactions</label>
+                    <div class="interaction-history">
+                        ${prospect.interactions.length > 0 ? 
+                            prospect.interactions.map(interaction => `
+                                <div class="interaction-item">
+                                    <div class="interaction-icon interaction-${interaction.type}">
+                                        ${getInteractionIcon(interaction.type)}
+                                    </div>
+                                    <div class="interaction-content">
+                                        <div class="interaction-title">${interaction.title}</div>
+                                        <div class="interaction-description">${interaction.description}</div>
+                                        <div class="interaction-time">${interaction.date}</div>
+                                    </div>
+                                </div>
+                            `).join('') 
+                            : '<p style="color: #94a3b8; text-align: center;">Aucune interaction enregistrée</p>'
+                        }
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="newNote">Ajouter une note</label>
+                    <textarea id="newNote" placeholder="Saisir une nouvelle note..."></textarea>
+                </div>
+                
+                <div style="display: flex; gap: 1rem; margin-top: 2rem;">
+                    <button class="btn" onclick="addNote(${prospectId})">📝 Ajouter Note</button>
+                    <button class="btn" onclick="contactProspect(${prospectId})">📧 Contacter</button>
+                    <button class="btn" onclick="scheduleCall(${prospectId})">📞 Programmer Appel</button>
+                </div>
+            `;
+            
+            document.getElementById('prospectModal').style.display = 'flex';
+        }
+
+        function getInteractionIcon(type) {
+            const icons = {
+                linkedin: 'in',
+                email: '@',
+                phone: '📞',
+                meeting: '📅'
+            };
+            return icons[type] || '?';
+        }
+
+        function contactProspect(prospectId) {
+            const prospect = prospects.find(p => p.id === prospectId);
+            if (!prospect) return;
+
+            // Simuler l'envoi d'un message
+            prospect.interactions.push({
+                type: 'email',
+                title: 'Email envoyé',
+                description: 'Message personnalisé envoyé via Graixl',
+                date: new Date().toLocaleString('fr-FR')
+            });
+
+            if (prospect.status === 'new') {
+                prospect.status = 'contacted';
+            }
+
+            loadProspects();
+            alert(`Message envoyé à ${prospect.name} !`);
+        }
+
+        function scheduleCall(prospectId) {
+            const prospect = prospects.find(p => p.id === prospectId);
+            if (!prospect) return;
+
+            const callDate = prompt('Date et heure du RDV (ex: 20/03/2024 15:00):');
+            if (callDate) {
+                prospect.interactions.push({
+                    type: 'meeting',
+                    title: 'RDV programmé',
+                    description: `Appel prévu le ${callDate}`,
+                    date: new Date().toLocaleString('fr-FR')
+                });
+
+                prospect.status = 'meeting';
+                loadProspects();
+                alert(`RDV programmé avec ${prospect.name} !`);
+            }
+        }
+
+        function addNote(prospectId) {
+            const note = document.getElementById('newNote').value.trim();
+            if (!note) return;
+
+            const prospect = prospects.find(p => p.id === prospectId);
+            if (prospect) {
+                prospect.interactions.push({
+                    type: 'email',
+                    title: 'Note ajoutée',
+                    description: note,
+                    date: new Date().toLocaleString('fr-FR')
+                });
+
+                document.getElementById('newNote').value = '';
+                viewProspect(prospectId); // Rafraîchir la modal
+            }
+        }
+
+        function closeModal() {
+            document.getElementById('prospectModal').style.display = 'none';
+        }
+
+        function addProspect() {
+            // Ouvrir une modal pour ajouter un prospect
+            document.getElementById('modalTitle').textContent = 'Ajouter un nouveau prospect';
+            
+            const modalContent = document.getElementById('modalContent');
+            modalContent.innerHTML = `
+                <div class="form-group">
+                    <label for="prospectName">Nom complet *</label>
+                    <input type="text" id="prospectName" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="prospectCompany">Entreprise *</label>
+                    <input type="text" id="prospectCompany" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="prospectTitle">Poste</label>
+                    <input type="text" id="prospectTitle" placeholder="ex: Directeur Marketing">
+                </div>
+                
+                <div class="form-group">
+                    <label for="prospectEmail">Email</label>
+                    <input type="email" id="prospectEmail">
+                </div>
+                
+                <div class="form-group">
+                    <label for="prospectPhone">Téléphone</label>
+                    <input type="tel" id="prospectPhone">
+                </div>
+                
+                <div class="form-group">
+                    <label for="prospectPriority">Priorité</label>
+                    <select id="prospectPriority">
+                        <option value="low">Basse</option>
+                        <option value="medium" selected>Moyenne</option>
+                        <option value="high">Haute</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label for="prospectCampaign">Campagne</label>
+                    <select id="prospectCampaign">
+                        <option value="manual">Ajout manuel</option>
+                        <option value="saas">Directeurs Marketing SaaS</option>
+                        <option value="cto">CTOs Startups Paris</option>
+                        <option value="ecommerce">CEOs E-commerce Lyon</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label for="prospectNotes">Notes initiales</label>
+                    <textarea id="prospectNotes" placeholder="Informations supplémentaires sur ce prospect..."></textarea>
+                </div>
+                
+                <div style="display: flex; gap: 1rem; margin-top: 2rem;">
+                    <button class="btn btn-primary" onclick="saveNewProspect()">💾 Enregistrer</button>
+                    <button class="btn" onclick="closeModal()">❌ Annuler</button>
+                </div>
+            `;
+            
+            document.getElementById('prospectModal').style.display = 'flex';
+        }
+
+        function saveNewProspect() {
+            const name = document.getElementById('prospectName').value.trim();
+            const company = document.getElementById('prospectCompany').value.trim();
+            
+            if (!name || !company) {
+                alert('Le nom et l\'entreprise sont obligatoires');
+                return;
+            }
+            
+            const newProspect = {
+                id: Math.max(...prospects.map(p => p.id)) + 1,
+                name,
+                company,
+                title: document.getElementById('prospectTitle').value.trim() || 'À définir',
+                email: document.getElementById('prospectEmail').value.trim(),
+                phone: document.getElementById('prospectPhone').value.trim(),
+                status: 'new',
+                priority: document.getElementById('prospectPriority').value,
+                score: Math.floor(Math.random() * 20) + 70, // Score aléatoire 70-90
+                campaign: document.getElementById('prospectCampaign').value,
+                addedDate: new Date().toISOString().split('T')[0],
+                lastContact: null,
+                tags: [],
+                interactions: []
+            };
+            
+            // Ajouter note initiale si fournie
+            const notes = document.getElementById('prospectNotes').value.trim();
+            if (notes) {
+                newProspect.interactions.push({
+                    type: 'email',
+                    title: 'Note initiale',
+                    description: notes,
+                    date: new Date().toLocaleString('fr-FR')
+                });
+            }
+            
+            prospects.push(newProspect);
+            filteredProspects = [...prospects];
+            loadProspects();
+            closeModal();
+            
+            alert(`✅ Prospect ${name} ajouté avec succès !`);
+        }
+
+        function quickAddProspect(status) {
+            const name = prompt('Nom du prospect:');
+            const company = prompt('Entreprise:');
+            
+            if (name && company) {
+                const newProspect = {
+                    id: prospects.length + 1,
+                    name,
+                    company,
+                    title: 'À définir',
+                    email: '',
+                    phone: '',
+                    status,
+                    priority: 'medium',
+                    score: 75,
+                    campaign: 'manual',
+                    addedDate: new Date().toISOString().split('T')[0],
+                    lastContact: null,
+                    tags: [],
+                    interactions: []
+                };
+
+                prospects.push(newProspect);
+                filteredProspects = [...prospects];
+                loadProspects();
+            }
+        }
+
+        function importProspects() {
+            alert('Fonctionnalité d\'import à venir...');
+        }
+
+        function exportPipeline() {
+            alert('Export du pipeline en cours...');
+        }
+
+        // Initialisation
+        document.addEventListener('DOMContentLoaded', () => {
+            setupDropZones();
+            loadProspects();
+
+            // Fermer la modal en cliquant à l'extérieur
+            document.getElementById('prospectModal').addEventListener('click', (e) => {
+                if (e.target === e.currentTarget) {
+                    closeModal();
+                }
+            });
+
+            // Filtres
+            document.getElementById('campaignFilter').addEventListener('change', filterProspects);
+            document.getElementById('priorityFilter').addEventListener('change', filterProspects);
+        });
+    </script>
+</body>
+</html>

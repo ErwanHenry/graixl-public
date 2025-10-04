@@ -1,0 +1,1134 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>📊 Graixl - Dashboard Analytics</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #f8fafc;
+            color: #334155;
+            line-height: 1.6;
+        }
+        
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 1rem 2rem;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+        }
+        
+        .header-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .header h1 {
+            font-size: 1.8rem;
+            font-weight: 600;
+        }
+        
+        .header-actions {
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+        }
+        
+        .btn {
+            background: rgba(255,255,255,0.2);
+            color: white;
+            border: none;
+            padding: 0.75rem 1.5rem;
+            border-radius: 8px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            text-decoration: none;
+        }
+        
+        .btn:hover {
+            background: rgba(255,255,255,0.3);
+            transform: translateY(-2px);
+        }
+        
+        .main-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+        
+        .filters-bar {
+            background: white;
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+            border: 1px solid #e2e8f0;
+        }
+        
+        .filters-content {
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+        
+        .filter-group {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+        
+        .filter-label {
+            font-size: 0.8rem;
+            font-weight: 500;
+            color: #64748b;
+        }
+        
+        .filter-input {
+            padding: 0.5rem 1rem;
+            border: 1px solid #e2e8f0;
+            border-radius: 6px;
+            font-size: 0.9rem;
+            min-width: 120px;
+        }
+        
+        .filter-input:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+        
+        .kpi-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+        
+        .kpi-card {
+            background: white;
+            border-radius: 12px;
+            padding: 1.5rem;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+            border: 1px solid #e2e8f0;
+            transition: transform 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .kpi-card:hover {
+            transform: translateY(-5px);
+        }
+        
+        .kpi-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: var(--accent-color, #667eea);
+        }
+        
+        .kpi-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 1rem;
+        }
+        
+        .kpi-title {
+            font-size: 0.9rem;
+            color: #64748b;
+            font-weight: 500;
+        }
+        
+        .kpi-icon {
+            font-size: 1.5rem;
+            opacity: 0.6;
+        }
+        
+        .kpi-value {
+            font-size: 2.5rem;
+            font-weight: bold;
+            color: #1e293b;
+            margin-bottom: 0.5rem;
+        }
+        
+        .kpi-subtitle {
+            font-size: 0.8rem;
+            color: #64748b;
+            margin-bottom: 1rem;
+        }
+        
+        .kpi-trend {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.8rem;
+            font-weight: 500;
+        }
+        
+        .trend-up { color: #10b981; }
+        .trend-down { color: #ef4444; }
+        .trend-neutral { color: #64748b; }
+        
+        .charts-grid {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+        
+        .chart-card {
+            background: white;
+            border-radius: 12px;
+            padding: 1.5rem;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+            border: 1px solid #e2e8f0;
+        }
+        
+        .chart-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+        }
+        
+        .chart-title {
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: #1e293b;
+        }
+        
+        .chart-controls {
+            display: flex;
+            gap: 0.5rem;
+        }
+        
+        .chart-btn {
+            padding: 0.25rem 0.75rem;
+            border: 1px solid #e2e8f0;
+            background: white;
+            border-radius: 6px;
+            font-size: 0.8rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .chart-btn.active {
+            background: #667eea;
+            color: white;
+            border-color: #667eea;
+        }
+        
+        .chart-container {
+            position: relative;
+            height: 300px;
+        }
+        
+        .performance-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+        
+        .performance-card {
+            background: white;
+            border-radius: 12px;
+            padding: 1.5rem;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+            border: 1px solid #e2e8f0;
+        }
+        
+        .performance-title {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: #1e293b;
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .leaderboard {
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+        }
+        
+        .leaderboard-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0.75rem;
+            background: #f8fafc;
+            border-radius: 8px;
+        }
+        
+        .leaderboard-rank {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+        
+        .rank-number {
+            background: #667eea;
+            color: white;
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.8rem;
+            font-weight: bold;
+        }
+        
+        .rank-name {
+            font-weight: 500;
+            color: #1e293b;
+        }
+        
+        .rank-metric {
+            font-weight: 600;
+            color: #667eea;
+        }
+        
+        .activity-feed {
+            max-height: 400px;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+        
+        .activity-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 1rem;
+            padding: 1rem;
+            background: #f8fafc;
+            border-radius: 8px;
+            border-left: 4px solid var(--activity-color, #667eea);
+        }
+        
+        .activity-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+            color: white;
+            background: var(--activity-color, #667eea);
+            flex-shrink: 0;
+        }
+        
+        .activity-content {
+            flex: 1;
+        }
+        
+        .activity-title {
+            font-weight: 500;
+            color: #1e293b;
+            margin-bottom: 0.25rem;
+        }
+        
+        .activity-description {
+            font-size: 0.9rem;
+            color: #64748b;
+            margin-bottom: 0.25rem;
+        }
+        
+        .activity-time {
+            font-size: 0.8rem;
+            color: #94a3b8;
+        }
+        
+        .insights-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+        
+        .insight-card {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border-radius: 12px;
+            padding: 1.5rem;
+            box-shadow: 0 4px 20px rgba(102, 126, 234, 0.3);
+        }
+        
+        .insight-icon {
+            font-size: 2rem;
+            margin-bottom: 1rem;
+        }
+        
+        .insight-title {
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+        
+        .insight-description {
+            font-size: 0.9rem;
+            opacity: 0.9;
+            line-height: 1.5;
+        }
+        
+        .insight-action {
+            margin-top: 1rem;
+            padding: 0.5rem 1rem;
+            background: rgba(255,255,255,0.2);
+            border: none;
+            border-radius: 6px;
+            color: white;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .insight-action:hover {
+            background: rgba(255,255,255,0.3);
+        }
+        
+        .loading {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 200px;
+            color: #64748b;
+        }
+        
+        .loading-spinner {
+            width: 40px;
+            height: 40px;
+            border: 3px solid #e2e8f0;
+            border-top: 3px solid #667eea;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin-right: 1rem;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        @media (max-width: 768px) {
+            .charts-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .kpi-grid {
+                grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            }
+            
+            .filters-content {
+                flex-direction: column;
+                align-items: stretch;
+            }
+            
+            .chart-container {
+                height: 250px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <div class="header-content">
+            <h1>📊 Analytics Dashboard Graixl</h1>
+            <div class="header-actions">
+                <button class="btn" onclick="exportReport()">
+                    <span>📥</span> Exporter
+                </button>
+                <button class="btn" onclick="refreshData()">
+                    <span>🔄</span> Actualiser
+                </button>
+                <button class="btn" onclick="goToDashboard()">
+                    <span>🎯</span> Dashboard
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <div class="main-container">
+        <!-- Filtres -->
+        <div class="filters-bar">
+            <div class="filters-content">
+                <div class="filter-group">
+                    <div class="filter-label">Période</div>
+                    <select class="filter-input" id="periodFilter" onchange="updatePeriod()">
+                        <option value="7d">7 derniers jours</option>
+                        <option value="30d" selected>30 derniers jours</option>
+                        <option value="90d">90 derniers jours</option>
+                        <option value="1y">1 an</option>
+                    </select>
+                </div>
+                
+                <div class="filter-group">
+                    <div class="filter-label">Campagne</div>
+                    <select class="filter-input" id="campaignFilter" onchange="updateCampaign()">
+                        <option value="all">Toutes les campagnes</option>
+                        <option value="1">Directeurs Marketing SaaS</option>
+                        <option value="2">CTOs Startups Paris</option>
+                        <option value="3">CEOs E-commerce Lyon</option>
+                    </select>
+                </div>
+                
+                <div class="filter-group">
+                    <div class="filter-label">Métrique</div>
+                    <select class="filter-input" id="metricFilter" onchange="updateMetric()">
+                        <option value="prospects">Prospects</option>
+                        <option value="responses">Réponses</option>
+                        <option value="meetings">RDV</option>
+                        <option value="conversions">Conversions</option>
+                    </select>
+                </div>
+                
+                <button class="btn" onclick="applyFilters()" style="background: #667eea; margin-top: 1.5rem;">
+                    <span>🔍</span> Appliquer
+                </button>
+            </div>
+        </div>
+
+        <!-- KPIs Principaux -->
+        <div class="kpi-grid">
+            <div class="kpi-card" style="--accent-color: #10b981;">
+                <div class="kpi-header">
+                    <div class="kpi-title">Prospects Générés</div>
+                    <div class="kpi-icon">👥</div>
+                </div>
+                <div class="kpi-value" id="totalProspects">1,247</div>
+                <div class="kpi-subtitle">Ce mois</div>
+                <div class="kpi-trend trend-up">
+                    <span>↗️</span> +23% vs mois dernier
+                </div>
+            </div>
+            
+            <div class="kpi-card" style="--accent-color: #667eea;">
+                <div class="kpi-header">
+                    <div class="kpi-title">Taux de Réponse</div>
+                    <div class="kpi-icon">💬</div>
+                </div>
+                <div class="kpi-value" id="responseRate">18.5%</div>
+                <div class="kpi-subtitle">Moyenne campagnes actives</div>
+                <div class="kpi-trend trend-up">
+                    <span>↗️</span> +2.3% vs objectif
+                </div>
+            </div>
+            
+            <div class="kpi-card" style="--accent-color: #f59e0b;">
+                <div class="kpi-header">
+                    <div class="kpi-title">RDV Programmés</div>
+                    <div class="kpi-icon">📅</div>
+                </div>
+                <div class="kpi-value" id="meetingsScheduled">89</div>
+                <div class="kpi-subtitle">Ce mois</div>
+                <div class="kpi-trend trend-up">
+                    <span>↗️</span> +31% vs mois dernier
+                </div>
+            </div>
+            
+            <div class="kpi-card" style="--accent-color: #8b5cf6;">
+                <div class="kpi-header">
+                    <div class="kpi-title">ROI Prospection</div>
+                    <div class="kpi-icon">💰</div>
+                </div>
+                <div class="kpi-value" id="roi">340%</div>
+                <div class="kpi-subtitle">Retour sur investissement</div>
+                <div class="kpi-trend trend-up">
+                    <span>↗️</span> +45% vs mois dernier
+                </div>
+            </div>
+            
+            <div class="kpi-card" style="--accent-color: #ef4444;">
+                <div class="kpi-header">
+                    <div class="kpi-title">Emails Envoyés</div>
+                    <div class="kpi-icon">📧</div>
+                </div>
+                <div class="kpi-value" id="emailsSent">3,456</div>
+                <div class="kpi-subtitle">Ce mois</div>
+                <div class="kpi-trend trend-up">
+                    <span>↗️</span> +18% vs mois dernier
+                </div>
+            </div>
+            
+            <div class="kpi-card" style="--accent-color: #06b6d4;">
+                <div class="kpi-header">
+                    <div class="kpi-title">Taux d'Ouverture</div>
+                    <div class="kpi-icon">👀</div>
+                </div>
+                <div class="kpi-value" id="openRate">45.2%</div>
+                <div class="kpi-subtitle">Emails ouverts</div>
+                <div class="kpi-trend trend-neutral">
+                    <span>→</span> Stable vs mois dernier
+                </div>
+            </div>
+        </div>
+
+        <!-- Graphiques Principaux -->
+        <div class="charts-grid">
+            <div class="chart-card">
+                <div class="chart-header">
+                    <div class="chart-title">Performance des Campagnes</div>
+                    <div class="chart-controls">
+                        <button class="chart-btn active" onclick="switchChart('prospects')">Prospects</button>
+                        <button class="chart-btn" onclick="switchChart('responses')">Réponses</button>
+                        <button class="chart-btn" onclick="switchChart('meetings')">RDV</button>
+                    </div>
+                </div>
+                <div class="chart-container">
+                    <canvas id="performanceChart"></canvas>
+                </div>
+            </div>
+            
+            <div class="chart-card">
+                <div class="chart-header">
+                    <div class="chart-title">Répartition par Canal</div>
+                </div>
+                <div class="chart-container">
+                    <canvas id="channelChart"></canvas>
+                </div>
+            </div>
+        </div>
+
+        <!-- Analyses de Performance -->
+        <div class="performance-grid">
+            <div class="performance-card">
+                <div class="performance-title">
+                    <span>🏆</span> Top Campagnes
+                </div>
+                <div class="leaderboard" id="topCampaigns">
+                    <!-- Les campagnes seront chargées ici -->
+                </div>
+            </div>
+            
+            <div class="performance-card">
+                <div class="performance-title">
+                    <span>📊</span> Top Templates Email
+                </div>
+                <div class="leaderboard" id="topTemplates">
+                    <!-- Les templates seront chargés ici -->
+                </div>
+            </div>
+            
+            <div class="performance-card">
+                <div class="performance-title">
+                    <span>🎯</span> Conversion par Secteur
+                </div>
+                <div class="leaderboard" id="topIndustries">
+                    <!-- Les secteurs seront chargés ici -->
+                </div>
+            </div>
+            
+            <div class="performance-card">
+                <div class="performance-title">
+                    <span>📈</span> Activité Récente
+                </div>
+                <div class="activity-feed" id="recentActivity">
+                    <!-- L'activité sera chargée ici -->
+                </div>
+            </div>
+        </div>
+
+        <!-- Insights IA -->
+        <div class="insights-grid">
+            <div class="insight-card">
+                <div class="insight-icon">🤖</div>
+                <div class="insight-title">Optimisation IA Suggérée</div>
+                <div class="insight-description">
+                    L'IA recommande d'ajuster l'horaire d'envoi des emails. 
+                    Les mardis à 10h montrent +34% de taux d'ouverture.
+                </div>
+                <button class="insight-action" onclick="applyAIOptimization()">
+                    Appliquer la recommandation
+                </button>
+            </div>
+            
+            <div class="insight-card">
+                <div class="insight-icon">📊</div>
+                <div class="insight-title">Tendance Détectée</div>
+                <div class="insight-description">
+                    Les prospects du secteur SaaS montrent une préférence 
+                    pour les messages LinkedIn courts (moins de 100 mots).
+                </div>
+                <button class="insight-action" onclick="viewTrendDetails()">
+                    Voir les détails
+                </button>
+            </div>
+            
+            <div class="insight-card">
+                <div class="insight-icon">⚡</div>
+                <div class="insight-title">Opportunité Manquée</div>
+                <div class="insight-description">
+                    23 prospects qualifiés n'ont pas reçu de follow-up dans les 48h. 
+                    Action automatique recommandée.
+                </div>
+                <button class="insight-action" onclick="triggerAutomaticFollowup()">
+                    Activer le follow-up auto
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Données de démonstration
+        const analyticsData = {
+            prospects: {
+                total: 1247,
+                trend: '+23%',
+                daily: [45, 52, 38, 67, 89, 76, 92, 56, 73, 84, 91, 67, 78, 85, 94, 67, 72, 89, 95, 78, 83, 97, 74, 86, 88, 92, 79, 81, 87, 93],
+                bySource: {
+                    'LinkedIn': 756,
+                    'Email': 321,
+                    'Référence': 170
+                }
+            },
+            responses: {
+                rate: 18.5,
+                total: 231,
+                trend: '+2.3%',
+                daily: [8, 12, 7, 15, 21, 18, 24, 11, 16, 19, 22, 14, 17, 20, 23, 15, 16, 21, 25, 18, 19, 26, 16, 20, 21, 24, 17, 18, 20, 25]
+            },
+            meetings: {
+                total: 89,
+                trend: '+31%',
+                scheduled: 23,
+                completed: 66
+            },
+            emails: {
+                sent: 3456,
+                opened: 1562,
+                clicked: 423,
+                replied: 231,
+                openRate: 45.2,
+                clickRate: 12.2,
+                replyRate: 6.7
+            }
+        };
+
+        // Données des leaderboards
+        const leaderboardData = {
+            campaigns: [
+                { name: 'Directeurs Marketing SaaS', metric: '24.5%', value: 245 },
+                { name: 'CTOs Startups Paris', metric: '19.8%', value: 198 },
+                { name: 'CEOs E-commerce Lyon', metric: '16.3%', value: 163 },
+                { name: 'Managers IT France', metric: '14.7%', value: 147 },
+                { name: 'Fondateurs Tech', metric: '12.1%', value: 121 }
+            ],
+            templates: [
+                { name: 'Intro SaaS Personnalisée', metric: '28.4%', value: 284 },
+                { name: 'Follow-up Tech Leaders', metric: '22.1%', value: 221 },
+                { name: 'Proposition Partenariat', metric: '19.6%', value: 196 },
+                { name: 'Demo Request Simple', metric: '17.8%', value: 178 },
+                { name: 'Reconnect Template', metric: '15.2%', value: 152 }
+            ],
+            industries: [
+                { name: 'SaaS B2B', metric: '31.2%', value: 312 },
+                { name: 'E-commerce', metric: '26.8%', value: 268 },
+                { name: 'FinTech', metric: '22.4%', value: 224 },
+                { name: 'HealthTech', metric: '18.9%', value: 189 },
+                { name: 'EdTech', metric: '16.1%', value: 161 }
+            ]
+        };
+
+        // Activité récente
+        const recentActivityData = [
+            {
+                type: 'meeting',
+                icon: '📅',
+                title: 'RDV programmé',
+                description: 'Marie Dubois (TechCorp) - Demain 15h',
+                time: 'Il y a 1 heure',
+                color: '#8b5cf6'
+            },
+            {
+                type: 'response',
+                icon: '💬',
+                title: 'Réponse positive',
+                description: 'Jean Martin intéressé par une démo',
+                time: 'Il y a 2 heures',
+                color: '#10b981'
+            },
+            {
+                type: 'email',
+                icon: '📧',
+                title: 'Séquence terminée',
+                description: '15 emails envoyés - Campagne SaaS',
+                time: 'Il y a 3 heures',
+                color: '#667eea'
+            },
+            {
+                type: 'prospect',
+                icon: '👤',
+                title: 'Nouveaux prospects',
+                description: '12 prospects qualifiés trouvés',
+                time: 'Il y a 4 heures',
+                color: '#f59e0b'
+            },
+            {
+                type: 'automation',
+                icon: '🤖',
+                title: 'Automatisation déclenchée',
+                description: 'Follow-up automatique activé',
+                time: 'Il y a 5 heures',
+                color: '#06b6d4'
+            }
+        ];
+
+        // Variables des graphiques
+        let performanceChart = null;
+        let channelChart = null;
+
+        // Initialisation
+        document.addEventListener('DOMContentLoaded', () => {
+            initializeCharts();
+            loadLeaderboards();
+            loadActivity();
+            startRealTimeUpdates();
+        });
+
+        // Initialiser les graphiques
+        function initializeCharts() {
+            // Graphique de performance
+            const performanceCtx = document.getElementById('performanceChart').getContext('2d');
+            performanceChart = new Chart(performanceCtx, {
+                type: 'line',
+                data: {
+                    labels: generateDateLabels(30),
+                    datasets: [{
+                        label: 'Prospects générés',
+                        data: analyticsData.prospects.daily,
+                        borderColor: '#667eea',
+                        backgroundColor: 'rgba(102, 126, 234, 0.1)',
+                        tension: 0.4,
+                        fill: true
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            display: false
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            grid: {
+                                color: '#f1f5f9'
+                            }
+                        },
+                        x: {
+                            grid: {
+                                display: false
+                            }
+                        }
+                    }
+                }
+            });
+
+            // Graphique en donut pour les canaux
+            const channelCtx = document.getElementById('channelChart').getContext('2d');
+            channelChart = new Chart(channelCtx, {
+                type: 'doughnut',
+                data: {
+                    labels: Object.keys(analyticsData.prospects.bySource),
+                    datasets: [{
+                        data: Object.values(analyticsData.prospects.bySource),
+                        backgroundColor: ['#667eea', '#10b981', '#f59e0b'],
+                        borderWidth: 0
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            position: 'bottom',
+                            labels: {
+                                padding: 20,
+                                usePointStyle: true
+                            }
+                        }
+                    }
+                }
+            });
+        }
+
+        // Charger les leaderboards
+        function loadLeaderboards() {
+            loadLeaderboard('topCampaigns', leaderboardData.campaigns);
+            loadLeaderboard('topTemplates', leaderboardData.templates);
+            loadLeaderboard('topIndustries', leaderboardData.industries);
+        }
+
+        function loadLeaderboard(containerId, data) {
+            const container = document.getElementById(containerId);
+            
+            container.innerHTML = data.map((item, index) => `
+                <div class="leaderboard-item">
+                    <div class="leaderboard-rank">
+                        <div class="rank-number">${index + 1}</div>
+                        <div class="rank-name">${item.name}</div>
+                    </div>
+                    <div class="rank-metric">${item.metric}</div>
+                </div>
+            `).join('');
+        }
+
+        // Charger l'activité récente
+        function loadActivity() {
+            const container = document.getElementById('recentActivity');
+            
+            container.innerHTML = recentActivityData.map(activity => `
+                <div class="activity-item" style="--activity-color: ${activity.color};">
+                    <div class="activity-icon" style="background: ${activity.color};">
+                        ${activity.icon}
+                    </div>
+                    <div class="activity-content">
+                        <div class="activity-title">${activity.title}</div>
+                        <div class="activity-description">${activity.description}</div>
+                        <div class="activity-time">${activity.time}</div>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // Changer le graphique de performance
+        function switchChart(type) {
+            // Mettre à jour les boutons
+            document.querySelectorAll('.chart-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            event.target.classList.add('active');
+
+            // Mettre à jour les données
+            let newData, newLabel, newColor;
+            
+            switch(type) {
+                case 'prospects':
+                    newData = analyticsData.prospects.daily;
+                    newLabel = 'Prospects générés';
+                    newColor = '#667eea';
+                    break;
+                case 'responses':
+                    newData = analyticsData.responses.daily;
+                    newLabel = 'Réponses reçues';
+                    newColor = '#10b981';
+                    break;
+                case 'meetings':
+                    newData = generateMeetingData();
+                    newLabel = 'RDV programmés';
+                    newColor = '#f59e0b';
+                    break;
+            }
+
+            performanceChart.data.datasets[0].data = newData;
+            performanceChart.data.datasets[0].label = newLabel;
+            performanceChart.data.datasets[0].borderColor = newColor;
+            performanceChart.data.datasets[0].backgroundColor = newColor + '20';
+            performanceChart.update('none');
+        }
+
+        // Fonctions d'action
+        function updatePeriod() {
+            const period = document.getElementById('periodFilter').value;
+            console.log('Mise à jour période:', period);
+            // Ici on mettrait à jour les données selon la période
+            showLoading();
+            setTimeout(() => {
+                hideLoading();
+                updateCharts();
+            }, 1000);
+        }
+
+        function updateCampaign() {
+            const campaign = document.getElementById('campaignFilter').value;
+            console.log('Mise à jour campagne:', campaign);
+            // Filtrer les données par campagne
+        }
+
+        function updateMetric() {
+            const metric = document.getElementById('metricFilter').value;
+            console.log('Mise à jour métrique:', metric);
+            // Changer la métrique affichée
+        }
+
+        function applyFilters() {
+            console.log('Application des filtres');
+            showLoading();
+            setTimeout(() => {
+                hideLoading();
+                updateAllData();
+            }, 1500);
+        }
+
+        function exportReport() {
+            console.log('Export du rapport');
+            // Ici on génèrerait et téléchargerait le rapport
+            alert('📊 Rapport exporté avec succès !');
+        }
+
+        function refreshData() {
+            console.log('Actualisation des données');
+            showLoading();
+            setTimeout(() => {
+                hideLoading();
+                updateAllData();
+                updateKPIs();
+            }, 1000);
+        }
+
+        function goToDashboard() {
+            window.location.href = '/dashboard-prospection.html';
+        }
+
+        // Actions des insights IA
+        function applyAIOptimization() {
+            console.log('Application optimisation IA');
+            alert('🤖 Optimisation IA appliquée ! Les emails seront maintenant envoyés le mardi à 10h.');
+        }
+
+        function viewTrendDetails() {
+            console.log('Affichage détails tendance');
+            alert('📊 Tendance détectée : Messages LinkedIn courts (+34% de réponses)');
+        }
+
+        function triggerAutomaticFollowup() {
+            console.log('Déclenchement follow-up automatique');
+            alert('⚡ Follow-up automatique activé pour 23 prospects !');
+        }
+
+        // Fonctions utilitaires
+        function generateDateLabels(days) {
+            const labels = [];
+            for (let i = days - 1; i >= 0; i--) {
+                const date = new Date();
+                date.setDate(date.getDate() - i);
+                labels.push(date.toLocaleDateString('fr-FR', { day: 'numeric', month: 'short' }));
+            }
+            return labels;
+        }
+
+        function generateMeetingData() {
+            return Array.from({length: 30}, () => Math.floor(Math.random() * 8) + 1);
+        }
+
+        function showLoading() {
+            // Afficher un indicateur de chargement
+            console.log('⏳ Chargement...');
+        }
+
+        function hideLoading() {
+            console.log('✅ Chargement terminé');
+        }
+
+        function updateCharts() {
+            // Mettre à jour les graphiques avec de nouvelles données
+            performanceChart.update();
+            channelChart.update();
+        }
+
+        function updateAllData() {
+            // Mettre à jour toutes les données
+            loadLeaderboards();
+            loadActivity();
+            updateCharts();
+        }
+
+        function updateKPIs() {
+            // Animer la mise à jour des KPIs
+            const kpis = ['totalProspects', 'responseRate', 'meetingsScheduled', 'roi', 'emailsSent', 'openRate'];
+            kpis.forEach(kpi => {
+                const element = document.getElementById(kpi);
+                element.style.transform = 'scale(1.05)';
+                setTimeout(() => {
+                    element.style.transform = 'scale(1)';
+                }, 200);
+            });
+        }
+
+        // Mises à jour en temps réel
+        function startRealTimeUpdates() {
+            setInterval(() => {
+                // Simulation de nouvelles données en temps réel
+                if (Math.random() < 0.3) { // 30% de chance
+                    addNewActivity();
+                }
+                
+                if (Math.random() < 0.1) { // 10% de chance
+                    updateRandomKPI();
+                }
+            }, 30000); // Toutes les 30 secondes
+        }
+
+        function addNewActivity() {
+            const newActivities = [
+                {
+                    type: 'response',
+                    icon: '💬',
+                    title: 'Nouvelle réponse',
+                    description: 'Prospect intéressé par Graixl',
+                    time: 'À l\'instant',
+                    color: '#10b981'
+                },
+                {
+                    type: 'prospect',
+                    icon: '👤',
+                    title: 'Prospect qualifié',
+                    description: 'Nouveau prospect SaaS détecté',
+                    time: 'À l\'instant',
+                    color: '#667eea'
+                }
+            ];
+            
+            const newActivity = newActivities[Math.floor(Math.random() * newActivities.length)];
+            recentActivityData.unshift(newActivity);
+            
+            if (recentActivityData.length > 10) {
+                recentActivityData.pop();
+            }
+            
+            loadActivity();
+        }
+
+        function updateRandomKPI() {
+            const kpis = ['totalProspects', 'meetingsScheduled', 'emailsSent'];
+            const randomKPI = kpis[Math.floor(Math.random() * kpis.length)];
+            const element = document.getElementById(randomKPI);
+            
+            let currentValue = parseInt(element.textContent.replace(/[^\d]/g, ''));
+            const increment = Math.floor(Math.random() * 5) + 1;
+            
+            element.textContent = (currentValue + increment).toLocaleString();
+            element.style.color = '#10b981';
+            
+            setTimeout(() => {
+                element.style.color = '#1e293b';
+            }, 2000);
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,91 @@
+{
+  "version": 2,
+  "public": true,
+  "builds": [
+    {
+      "src": "api/**/*.js",
+      "use": "@vercel/node"
+    },
+    {
+      "src": "*.html",
+      "use": "@vercel/static"
+    },
+    {
+      "src": "*.css",
+      "use": "@vercel/static"
+    },
+    {
+      "src": "*.js",
+      "use": "@vercel/static"
+    },
+    {
+      "src": "public/**/*",
+      "use": "@vercel/static"
+    }
+  ],
+  "routes": [
+    {
+      "src": "/",
+      "dest": "/dashboard-prospection.html"
+    },
+    {
+      "src": "/dashboard",
+      "dest": "/dashboard-prospection.html"
+    },
+    {
+      "src": "/campaign-wizard",
+      "dest": "/campaign-wizard.html"
+    },
+    {
+      "src": "/prospects",
+      "dest": "/prospects-pipeline.html"
+    },
+    {
+      "src": "/analytics",
+      "dest": "/analytics-dashboard.html"
+    },
+    {
+      "src": "/demo",
+      "dest": "/public/ecosystem-demo.html"
+    },
+    {
+      "src": "/control",
+      "dest": "/ecosystem-control.html"
+    },
+    {
+      "src": "/hexagonal",
+      "dest": "/index-hexagonal.html"
+    },
+    {
+      "src": "/prospection",
+      "dest": "/prospection-app.html"
+    },
+    {
+      "src": "/test",
+      "dest": "/test-integration.html"
+    },
+    {
+      "src": "/api/(.*)",
+      "dest": "/api/$1"
+    },
+    {
+      "src": "/(.*\\.html)",
+      "dest": "/$1"
+    },
+    {
+      "src": "/(.*\\.css)",
+      "dest": "/$1"
+    },
+    {
+      "src": "/(.*\\.js)",
+      "dest": "/$1"
+    },
+    {
+      "src": "/(.*)",
+      "dest": "/$1"
+    }
+  ],
+  "env": {
+    "NODE_ENV": "production"
+  }
+}

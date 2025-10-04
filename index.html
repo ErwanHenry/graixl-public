@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🎯 Graixl - Plateforme de Prospection B2B</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+            text-align: center;
+        }
+        
+        .hero {
+            margin-bottom: 4rem;
+        }
+        
+        .logo {
+            font-size: 4rem;
+            margin-bottom: 1rem;
+        }
+        
+        .title {
+            font-size: 3rem;
+            font-weight: bold;
+            margin-bottom: 1rem;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+        
+        .subtitle {
+            font-size: 1.3rem;
+            opacity: 0.9;
+            margin-bottom: 3rem;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-bottom: 4rem;
+        }
+        
+        .feature-card {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 16px;
+            padding: 2rem;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            transition: all 0.3s ease;
+            cursor: pointer;
+            text-decoration: none;
+            color: white;
+        }
+        
+        .feature-card:hover {
+            transform: translateY(-10px);
+            background: rgba(255, 255, 255, 0.2);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.2);
+        }
+        
+        .feature-icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+        }
+        
+        .feature-title {
+            font-size: 1.5rem;
+            font-weight: bold;
+            margin-bottom: 1rem;
+        }
+        
+        .feature-description {
+            opacity: 0.9;
+            line-height: 1.6;
+        }
+        
+        .cta-section {
+            margin-top: 4rem;
+        }
+        
+        .cta-button {
+            display: inline-block;
+            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+            color: white;
+            padding: 1.5rem 3rem;
+            border-radius: 50px;
+            font-size: 1.2rem;
+            font-weight: bold;
+            text-decoration: none;
+            box-shadow: 0 10px 30px rgba(16, 185, 129, 0.3);
+            transition: all 0.3s ease;
+        }
+        
+        .cta-button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 40px rgba(16, 185, 129, 0.4);
+        }
+        
+        .stats {
+            display: flex;
+            justify-content: center;
+            gap: 3rem;
+            margin: 3rem 0;
+            flex-wrap: wrap;
+        }
+        
+        .stat {
+            text-align: center;
+        }
+        
+        .stat-number {
+            font-size: 2.5rem;
+            font-weight: bold;
+            margin-bottom: 0.5rem;
+        }
+        
+        .stat-label {
+            opacity: 0.8;
+            font-size: 0.9rem;
+        }
+        
+        .deployment-info {
+            background: rgba(16, 185, 129, 0.1);
+            border: 1px solid rgba(16, 185, 129, 0.3);
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin: 2rem 0;
+            font-size: 0.9rem;
+        }
+        
+        .url {
+            font-family: monospace;
+            background: rgba(0,0,0,0.2);
+            padding: 0.5rem;
+            border-radius: 6px;
+            margin: 0.5rem 0;
+            word-break: break-all;
+        }
+        
+        @media (max-width: 768px) {
+            .title {
+                font-size: 2rem;
+            }
+            
+            .subtitle {
+                font-size: 1.1rem;
+            }
+            
+            .features-grid {
+                grid-template-columns: 1fr;
+                gap: 1rem;
+            }
+            
+            .stats {
+                gap: 2rem;
+            }
+            
+            .container {
+                padding: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="hero">
+            <div class="logo">🎯</div>
+            <h1 class="title">Graixl</h1>
+            <p class="subtitle">
+                Plateforme d'automatisation de prospection B2B powered by AI
+                <br>
+                Transformez vos leads en clients avec l'intelligence artificielle
+            </p>
+        </div>
+        
+        <div class="deployment-info">
+            <strong>✅ Déployé en Production sur Vercel</strong>
+            <div class="url">https://graixl-public.vercel.app</div>
+            <small>Architecture complète • APIs opérationnelles • Mobile optimisé</small>
+        </div>
+        
+        <div class="stats">
+            <div class="stat">
+                <div class="stat-number">300%</div>
+                <div class="stat-label">Augmentation prospects</div>
+            </div>
+            <div class="stat">
+                <div class="stat-number">89%</div>
+                <div class="stat-label">Précision IA</div>
+            </div>
+            <div class="stat">
+                <div class="stat-number">450%</div>
+                <div class="stat-label">ROI moyen</div>
+            </div>
+        </div>
+        
+        <div class="features-grid">
+            <a href="dashboard-prospection.html" class="feature-card">
+                <div class="feature-icon">📊</div>
+                <div class="feature-title">Dashboard Principal</div>
+                <div class="feature-description">
+                    Visualisez toutes vos campagnes, métriques et performances en temps réel.
+                    Suivez l'activité de vos prospects et optimisez vos résultats.
+                </div>
+            </a>
+
+            <a href="campaign-wizard.html" class="feature-card">
+                <div class="feature-icon">🚀</div>
+                <div class="feature-title">Créer une Campagne</div>
+                <div class="feature-description">
+                    Wizard intelligent pour créer des campagnes de prospection optimisées.
+                    Templates prêts à l'emploi et personnalisation avancée.
+                </div>
+            </a>
+
+            <a href="prospects-pipeline.html" class="feature-card">
+                <div class="feature-icon">👥</div>
+                <div class="feature-title">Pipeline CRM</div>
+                <div class="feature-description">
+                    Gérez vos prospects dans un pipeline Kanban intuitif.
+                    Drag & drop, interactions trackées, scoring automatique.
+                </div>
+            </a>
+
+            <a href="analytics-dashboard.html" class="feature-card">
+                <div class="feature-icon">📈</div>
+                <div class="feature-title">Analytics Avancées</div>
+                <div class="feature-description">
+                    Dashboards d'analyse avec insights IA, prédictions de performance
+                    et recommandations d'optimisation automatiques.
+                </div>
+            </a>
+        </div>
+
+        <div class="cta-section">
+            <a href="dashboard-prospection.html" class="cta-button">
+                🎯 Accéder au Dashboard
+            </a>
+        </div>
+    </div>
+
+    <script>
+        // Animation d'entrée
+        document.addEventListener('DOMContentLoaded', () => {
+            const cards = document.querySelectorAll('.feature-card');
+            cards.forEach((card, index) => {
+                card.style.opacity = '0';
+                card.style.transform = 'translateY(30px)';
+                
+                setTimeout(() => {
+                    card.style.transition = 'all 0.6s ease';
+                    card.style.opacity = '1';
+                    card.style.transform = 'translateY(0)';
+                }, index * 150);
+            });
+        });
+
+        // Track clicks pour analytics
+        document.querySelectorAll('.feature-card').forEach(card => {
+            card.addEventListener('click', (e) => {
+                const feature = e.currentTarget.href.split('/').pop();
+                console.log(`🎯 Navigation vers: ${feature}`);
+                
+                // Analytics tracking (si API disponible)
+                if (typeof gtag !== 'undefined') {
+                    gtag('event', 'navigation', {
+                        'event_category': 'homepage',
+                        'event_label': feature
+                    });
+                }
+            });
+        });
+    </script>
+</body>
+</html>
