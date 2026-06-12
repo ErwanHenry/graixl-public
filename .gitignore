@@ -1,2 +1,3 @@
 .vercel
 .cargo/
+.env.example
