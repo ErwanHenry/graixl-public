@@ -385,8 +385,8 @@ class LinkedInProfile {
   }
 
   isSeniorProfile() {
-    return this.experience.some(exp => 
-      exp.title && ['head', 'director', 'manager', 'chief', 'vp'].some(keyword =>
+    return this.experience.some(exp =>
+      exp.title && ['head', 'director', 'manager', 'chief', 'vp', 'senior'].some(keyword =>
         exp.title.toLowerCase().includes(keyword)
       )
     )
