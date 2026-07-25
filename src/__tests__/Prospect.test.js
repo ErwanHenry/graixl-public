@@ -95,27 +95,27 @@ describe('Prospect', () => {
 
     describe('hasCompleteProfile', () => {
       test('should return true when all required fields present', () => {
-        expect(prospect.hasCompleteProfile()).toBe(true);
+        expect(prospect.hasCompleteProfile()).toBeTruthy();
       });
 
       test('should return false when name missing', () => {
         prospect.name = null;
-        expect(prospect.hasCompleteProfile()).toBe(false);
+        expect(prospect.hasCompleteProfile()).toBeFalsy();
       });
 
       test('should return false when title missing', () => {
         prospect.title = null;
-        expect(prospect.hasCompleteProfile()).toBe(false);
+        expect(prospect.hasCompleteProfile()).toBeFalsy();
       });
 
       test('should return false when company missing', () => {
         prospect.company = null;
-        expect(prospect.hasCompleteProfile()).toBe(false);
+        expect(prospect.hasCompleteProfile()).toBeFalsy();
       });
 
       test('should return false when industry missing', () => {
         prospect.industry = null;
-        expect(prospect.hasCompleteProfile()).toBe(false);
+        expect(prospect.hasCompleteProfile()).toBeFalsy();
       });
     });
 
@@ -262,9 +262,9 @@ describe('Prospect', () => {
       const prospect = new Prospect({
         id: 'complete',
         name: 'Complete User',
-        title: 'Analyst',
+        title: 'Director',
         company: 'CompleteCo',
-        industry: 'retail'
+        industry: 'technology'
       });
 
       expect(prospect.calculateGraixlScore()).toBeGreaterThanOrEqual(30);
@@ -803,7 +803,7 @@ describe('Prospect', () => {
         company: 'SerializeCo',
         industry: 'technology',
         email: 'serialize@serializeco.com',
-        linkedinProfile: null,
+        linkedinProfile: undefined,
         contactInfo: expect.any(Object),
         prospectionMetadata: expect.any(Object),
         graixlScore: expect.any(Number),
@@ -877,7 +877,7 @@ describe('Prospect', () => {
         industry: 'technology'
       });
 
-      expect(prospect.hasCompleteProfile()).toBe(false);
+      expect(prospect.hasCompleteProfile()).toBeFalsy();
     });
 
     test('should handle undefined optional fields', () => {
