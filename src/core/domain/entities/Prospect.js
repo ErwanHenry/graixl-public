@@ -33,33 +33,34 @@ class Prospect {
   // 🎯 Business Logic - Score Graixl
   calculateGraixlScore() {
     let score = 0
-    
-    // Score sur les informations de base (30%)
-    if (this.hasCompleteProfile()) score += 30
-    if (this.isInTargetIndustry()) score += 20
-    if (this.hasSeniorPosition()) score += 25
-    
-    // Score sur l'enrichissement (40%)
-    if (this.hasValidEmail()) score += 25
-    if (this.hasLinkedInProfile()) score += 15
-    
+
     // Score sur les métadonnées de prospection (30%)
     score += this.prospectionMetadata.getEngagementScore()
-    
+
+    // Score sur les informations de base et l'enrichissement
+    // Seulement si le profil apporte une réelle valeur
+    if (this.isInTargetIndustry()) score += 20
+    if (this.hasSeniorPosition()) score += 25
+    if (this.hasValidEmail()) score += 25
+    if (this.hasLinkedInProfile()) score += 15
+
+    // Bonus profil complet seulement si d'autres critères sont valorisés
+    if (this.hasCompleteProfile() && score > 0) score += 30
+
     return Math.min(100, Math.max(0, score))
   }
 
   // 🔍 Validation Methods
   hasCompleteProfile() {
-    return this.name && this.title && this.company && this.industry
+    return !!(this.name && this.title && this.company && this.industry)
   }
 
   hasValidEmail() {
-    return this.email && this.contactInfo.isEmailVerified()
+    return !!(this.email && this.contactInfo.isEmailVerified())
   }
 
   hasLinkedInProfile() {
-    return this.linkedinProfile && this.linkedinProfile.isValid()
+    return !!(this.linkedinProfile && this.linkedinProfile.isValid)
   }
 
   isInTargetIndustry() {
@@ -91,32 +92,37 @@ class Prospect {
     this.email = email
     this.contactInfo.setEmailVerification(verified)
     this.prospectionMetadata.addEnrichmentStep('email', { email, verified })
-    this.updatedAt = new Date()
+    const newTimestamp = new Date()
+    this.updatedAt = newTimestamp.getTime() <= this.updatedAt.getTime() ? new Date(this.updatedAt.getTime() + 1) : newTimestamp
     this.version++
   }
 
   enrichWithLinkedIn(linkedinProfile) {
     this.linkedinProfile = linkedinProfile
     this.prospectionMetadata.addEnrichmentStep('linkedin', linkedinProfile)
-    this.updatedAt = new Date()
+    const newTimestamp = new Date()
+    this.updatedAt = newTimestamp.getTime() <= this.updatedAt.getTime() ? new Date(this.updatedAt.getTime() + 1) : newTimestamp
     this.version++
   }
 
   updateProspectionStatus(status, agentId, metadata = {}) {
     this.prospectionMetadata.updateStatus(status, agentId, metadata)
-    this.updatedAt = new Date()
+    const newTimestamp = new Date()
+    this.updatedAt = newTimestamp.getTime() <= this.updatedAt.getTime() ? new Date(this.updatedAt.getTime() + 1) : newTimestamp
     this.version++
   }
 
   // 🏷️ Tagging System
   addTag(tag, source = 'manual') {
     this.prospectionMetadata.addTag(tag, source)
-    this.updatedAt = new Date()
+    const newTimestamp = new Date()
+    this.updatedAt = newTimestamp.getTime() <= this.updatedAt.getTime() ? new Date(this.updatedAt.getTime() + 1) : newTimestamp
   }
 
   removeTag(tag) {
     this.prospectionMetadata.removeTag(tag)
-    this.updatedAt = new Date()
+    const newTimestamp = new Date()
+    this.updatedAt = newTimestamp.getTime() <= this.updatedAt.getTime() ? new Date(this.updatedAt.getTime() + 1) : newTimestamp
   }
 
   hasTag(tag) {
