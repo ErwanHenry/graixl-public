@@ -1,2 +1,6 @@
 .vercel
 .cargo/
+__pycache__/
+*.pyc
+.gsd-lock
+.pytest_cache/
