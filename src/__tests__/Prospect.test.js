@@ -803,7 +803,7 @@ describe('Prospect', () => {
         company: 'SerializeCo',
         industry: 'technology',
         email: 'serialize@serializeco.com',
-        linkedinProfile: null,
+        linkedinProfile: undefined,
         contactInfo: expect.any(Object),
         prospectionMetadata: expect.any(Object),
         graixlScore: expect.any(Number),
