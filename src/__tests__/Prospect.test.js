@@ -262,9 +262,9 @@ describe('Prospect', () => {
       const prospect = new Prospect({
         id: 'complete',
         name: 'Complete User',
-        title: 'Analyst',
+        title: 'Director',
         company: 'CompleteCo',
-        industry: 'retail'
+        industry: 'technology'
       });
 
       expect(prospect.calculateGraixlScore()).toBeGreaterThanOrEqual(30);
